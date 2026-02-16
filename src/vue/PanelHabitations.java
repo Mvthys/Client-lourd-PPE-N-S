@@ -181,7 +181,7 @@ public class PanelHabitations extends PanelPrincipal implements ActionListener {
 			txtIdProprietaire.addItem(" Selectionner ");
 			ArrayList<Proprietaire> lesProprietaires = Controleur.selectAllProprietaires("");
 			for(Proprietaire unProprietaire : lesProprietaires) {
-					txtIdProprietaire.addItem(unProprietaire.getId_p() + "-" + unProprietaire.getNom() + " " + unProprietaire.getPrenom());
+					txtIdProprietaire.addItem(unProprietaire.getId_user() + "-" + unProprietaire.getNom() + " " + unProprietaire.getPrenom());
 				}
 		}
 	

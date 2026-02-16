@@ -172,7 +172,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 		Object [] [] matrice = new Object [lesProprietaires.size()][10];
 		int i = 0;
 		for (Proprietaire unProprietaire : lesProprietaires) {
-			matrice[i][0] = unProprietaire.getId_p();
+			matrice[i][0] = unProprietaire.getId_user();
 			matrice[i][1] = unProprietaire.getNom();
 			matrice[i][2] = unProprietaire.getPrenom();
 			matrice[i][3] = unProprietaire.getEmail();
@@ -195,6 +195,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			this.viderChamps();
 			btModifier.setEnabled(false);
 			btSupprimer.setEnabled(false);
+			btnValider.setEnabled(true);
 		}else if (e.getSource() == this.btnValider){
 			this.insertProprietaire();
 		}else if(e.getSource() == this.btFiltrer) {
@@ -240,7 +241,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 					JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 				}else {
 					//instanciation nv Proprio
-					Proprietaire unProprietaire = new Proprietaire(idProprietaire,nom,prenom,email,mdp,adresse,cp,ville,tel,RIB);
+					Proprietaire unProprietaire = new Proprietaire(idProprietaire,nom,prenom,email,mdp,tel,adresse,cp,ville,tel,RIB);
 					//appel de la methode du controleur pour insérer proprio
 					Controleur.updateProprietaire(unProprietaire);
 					JOptionPane.showMessageDialog(this,"Modification réussie du proprietaire");
@@ -278,13 +279,13 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv Proprio
-			Proprietaire unProprietaire = new Proprietaire(nom,prenom,email,mdp,adresse,cp,ville,tel,RIB);
+			Proprietaire unProprietaire = new Proprietaire(nom,prenom,email,mdp,adresse,tel,cp,ville,tel,RIB);
 			//appel de la methode du controleur pour insérer proprio
 			Controleur.insertProprietaire(unProprietaire);
 			JOptionPane.showMessageDialog(this,"Insertion réussie du proprietaire");
 			//actualiser l'affichage
 			unProprietaire = Controleur.selectWhereProprietaire(email);
-			Object ligne [] = {unProprietaire.getId_p(),nom,prenom,email,mdp,adresse,cp,ville,tel,RIB};
+			Object ligne [] = {unProprietaire.getId_user(),nom,prenom,email,mdp,adresse,cp,ville,tel,RIB};
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();

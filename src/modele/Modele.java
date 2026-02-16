@@ -21,10 +21,10 @@ public class Modele {
 	
 	
 	
-/*** Admin ***/
+/*** Utilisateur ***/
 public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	Utilisateur unUtilisateur = null;
-	String requete = "select * from utilisateur where email ='"+ email +"' and mdp ='"+ mdp +"' and role = 'admin';";
+	String requete = "select * from utilisateur where email ='"+ email +"' and mdp ='"+ mdp +"';";
 		
 	try {
 		uneBdd.seConnecter();
@@ -93,34 +93,93 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	/*** Clients ***/
 	
 	public static void insertClient(Client unClient) {
-		String requete = "insert into client values (null,'"+unClient.getNom()+"','"+unClient.getPrenom()+"','"
-						  +unClient.getEmail()+"','"+unClient.getMdp()+"','"+unClient.getAdresse()+"','"
-						  +unClient.getCp()+"','"+unClient.getVille()+"','"+unClient.getTel()+"','"
-						  +unClient.getRib()+"');";
-		
-		executerRequete(requete);
+	    String reqUser = "insert into utilisateur values (null, '"
+	            + unClient.getNom() + "', '" + unClient.getPrenom() + "', '"
+	            + unClient.getEmail() + "', '" + unClient.getMdp() + "', '"
+	            + unClient.getTel() + "', 'client');";
+
+	    try {
+	        uneBdd.seConnecter();
+	        Statement unStat = uneBdd.getMaConnexion().createStatement();
+	        
+	        unStat.executeUpdate(reqUser, Statement.RETURN_GENERATED_KEYS);
+
+	        int lastId = 0;
+	        ResultSet rs = unStat.getGeneratedKeys();
+	        if (rs.next()) {
+	            lastId = rs.getInt(1);
+	        }
+
+	        String reqClient = "insert into client values ("
+	                + lastId + ", '" + unClient.getAdresse() + "', '"
+	                + unClient.getCp() + "', '" + unClient.getVille() + "', '"
+	                + unClient.getRib() + "');";
+
+	        unStat.executeUpdate(reqClient);
+
+	        unStat.close();
+	        uneBdd.seDeconnecter();
+	        
+	        System.out.println("Insertion réussie pour l'ID : " + lastId);
+
+	    } catch (SQLException e) {
+	        System.out.println("Erreur SQL : " + e.getMessage());
+	    }
 	}
+	
 	public static void updateClient(Client unClient) {
-		String requete = "update client set nom_c ='"+unClient.getNom()+"',prenom_c ='"+unClient.getPrenom()+"',email_c ='"
-						  +unClient.getEmail()+"', mdp_c ='"+unClient.getMdp()+"', adr_c ='"+unClient.getAdresse()+"',cp_c ='"
-						  +unClient.getCp()+"',ville_c ='"+unClient.getVille()+"', tel_c ='"+unClient.getTel()+"', rib_c='"
-						  +unClient.getRib()+"' where id_c ='"+unClient.getId_c()+"';";
-		
-		executerRequete(requete);
+	    // 1. Mise à jour de la table parente (Utilisateur)
+	    String reqUser = "update utilisateur set nom = '" + unClient.getNom() + "', "
+	            + "prenom = '" + unClient.getPrenom() + "', "
+	            + "email = '" + unClient.getEmail() + "', "
+	            + "mdp = '" + unClient.getMdp() + "', "
+	            + "tel = '" + unClient.getTel() + "' "
+	            + "where id_user = " + unClient.getId_user() + ";";
+
+	    // 2. Mise à jour de la table fille (Client)
+	    String reqClient = "update client set adresse = '" + unClient.getAdresse() + "', "
+	            + "cp = '" + unClient.getCp() + "', "
+	            + "ville = '" + unClient.getVille() + "', "
+	            + "RIB = '" + unClient.getRib() + "' "
+	            + "where id_c = " + unClient.getId_user() + ";";
+
+	    try {
+	        uneBdd.seConnecter();
+	        Statement unStat = uneBdd.getMaConnexion().createStatement();
+	        
+	        // On exécute les deux mises à jour
+	        unStat.executeUpdate(reqUser);
+	        unStat.executeUpdate(reqClient);
+
+	        unStat.close();
+	        uneBdd.seDeconnecter();
+	        
+	        System.out.println("Mise à jour réussie pour l'ID : " + unClient.getId_user());
+
+	    } catch (SQLException e) {
+	        System.out.println("Erreur SQL lors de l'update : " + e.getMessage());
+	    }
 	}
+	
 	public static void deleteClient(int idClient) {
-		String requete = "delete from client where id_c ='"+idClient+"';";
+		String requete = "delete from utilisateur where id_user ='"+idClient+"';";
 		executerRequete(requete);
 	}
+	
 	public static ArrayList<Client> selectAllClients(String filtre){
 		ArrayList<Client> lesClients = new ArrayList<Client>();
 		String requete;
 		
 		if (filtre.equals("")){
-			requete = "select * from client;"; 	
+			requete = "select * from utilisateur U inner join client C on U.id_user = C.id_c where U.role = 'client';"; 	
 		}else {
-			requete = "select * from client where nom_c like '%"+filtre+"%' or prenom_c like '%"+filtre+"%';";
-		}
+			requete = "select * from utilisateur U"
+			        + " inner join client C"
+			        + " on C.id_c = U.id_user"
+			        + " where (U.nom like '%"+filtre+"%'" 
+			        + " or U.prenom like '%"+filtre+"%'"
+			        + " or C.cp like '%"+filtre+"%');";
+			}
 		
 		
 		try {
@@ -130,23 +189,27 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 			
 			while (desResultats.next()) {
 				/*Instantiation class client*/
-				Client unClient = new Client(desResultats.getInt("id_c"),
-						desResultats.getString("nom_c"),desResultats.getString("prenom_c"),desResultats.getString("email_c"),
-						desResultats.getString("mdp_c"),desResultats.getString("adr_c"),desResultats.getString("cp_c"),
-						desResultats.getString("ville_c"),desResultats.getString("tel_c"),desResultats.getString("rib_c"));
+				Client unClient = new Client(desResultats.getInt("id_user"),
+						desResultats.getString("nom"),desResultats.getString("prenom"),desResultats.getString("email"),
+						desResultats.getString("mdp"),desResultats.getString("tel"),desResultats.getString("role"),
+						desResultats.getString("adresse"),desResultats.getString("cp"),desResultats.getString("ville"),
+						desResultats.getString("RIB"));
 				
 				lesClients.add(unClient);
 			}
 			
 		}catch(SQLException e) {
-		System.out.println("requete incorrect");
+		System.out.println("requete incorrect : " + requete);
 		}
 		return lesClients;
 	}
 	
 	public static Client selectWhereClient(String email) {
-	    Client leClient = null;
-	    String requete = "SELECT * FROM client WHERE email_c = '" + email + "';";
+		Client leClient = null;
+	    String requete = "select * from utilisateur U"
+		        + " inner join client C"
+		        + " on C.id_c = U.id_user"
+		        + " where C.email = '"+email+"';";
 
 	    try {
 	        uneBdd.seConnecter();
@@ -155,16 +218,17 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 
 	        if (rs.next()) {
 	            leClient = new Client(
-	                rs.getInt("id_c"),
-	                rs.getString("nom_c"),
-	                rs.getString("prenom_c"),
-	                rs.getString("email_c"),
-	                rs.getString("mdp_c"),
-	                rs.getString("adr_c"),
-	                rs.getString("cp_c"),
-	                rs.getString("ville_c"),
-	                rs.getString("tel_c"),
-	                rs.getString("rib_c")
+	                rs.getInt("id_user"),
+	                rs.getString("nom"),
+	                rs.getString("prenom"),
+	                rs.getString("email"),
+	                rs.getString("mdp"),
+	                rs.getString("tel"),
+	                rs.getString("role"),
+	                rs.getString("adresse"),
+	                rs.getString("cp"),
+	                rs.getString("ville"),
+	                rs.getString("RIB")
 	            );
 	        }
 
@@ -174,7 +238,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 
 	    return leClient;
 	}
-	
+		
 	
 	
 	
@@ -186,34 +250,94 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	/*** Proprietaires ***/
 	
 	public static void insertProprietaire(Proprietaire unProprietaire) {
-		String requete = "insert into proprietaire values (null,'"+unProprietaire.getNom()+"','"+unProprietaire.getPrenom()+"','"
-						  +unProprietaire.getEmail()+"','"+unProprietaire.getMdp()+"','"+unProprietaire.getAdresse()+"','"
-						  +unProprietaire.getCp()+"','"+unProprietaire.getVille()+"','"+unProprietaire.getTel()+"','"
-						  +unProprietaire.getRib()+"');";
-		
-		executerRequete(requete);
+		String reqUser = "insert into utilisateur values (null, '"
+	            + unProprietaire.getNom() + "', '" + unProprietaire.getPrenom() + "', '"
+	            + unProprietaire.getEmail() + "', '" + unProprietaire.getMdp() + "', '"
+	            + unProprietaire.getTel() + "', 'proprietaire');";
+
+	    try {
+	        uneBdd.seConnecter();
+	        Statement unStat = uneBdd.getMaConnexion().createStatement();
+	        
+	        unStat.executeUpdate(reqUser, Statement.RETURN_GENERATED_KEYS);
+
+	        int lastId = 0;
+	        ResultSet rs = unStat.getGeneratedKeys();
+	        if (rs.next()) {
+	            lastId = rs.getInt(1);
+	        }
+
+	        String reqProprietaire = "insert into proprietaire values ("
+	                + lastId + ", '" + unProprietaire.getAdresse() + "', '"
+	                + unProprietaire.getCp() + "', '" + unProprietaire.getVille() + "', '"
+	                + unProprietaire.getRib() + "');";
+
+	        unStat.executeUpdate(reqProprietaire);
+
+	        unStat.close();
+	        uneBdd.seDeconnecter();
+	        
+	        System.out.println("Insertion réussie pour l'ID : " + lastId);
+
+	    } catch (SQLException e) {
+	        System.out.println("Erreur SQL : " + e.getMessage());
+	    }
 	}
+	
 	public static void updateProprietaire(Proprietaire unProprietaire) {
-		String requete = "update proprietaire set nom_p ='"+unProprietaire.getNom()+"',prenom_p ='"+unProprietaire.getPrenom()+
-						 "',email_p ='"+unProprietaire.getEmail()+"', mdp_p ='"+unProprietaire.getMdp()+"', adr_p ='"
-						 +unProprietaire.getAdresse()+"',cp_p ='"+unProprietaire.getCp()+"',ville_p ='"+unProprietaire.getVille()+
-						 "', tel_p ='"+unProprietaire.getTel()+"', rib_p='"+unProprietaire.getRib()+"' where id_p = '"
-						 +unProprietaire.getId_p()+"';";
-		
-		executerRequete(requete);
+	    // 1. Mise à jour de la table parente (Utilisateur)
+	    String reqUser = "update utilisateur set nom = '" + unProprietaire.getNom() + "', "
+	            + "prenom = '" + unProprietaire.getPrenom() + "', "
+	            + "email = '" + unProprietaire.getEmail() + "', "
+	            + "mdp = '" + unProprietaire.getMdp() + "', "
+	            + "tel = '" + unProprietaire.getTel() + "' "
+	            + "where id_user = " + unProprietaire.getId_user() + ";";
+
+	    // 2. Mise à jour de la table fille (Client)
+	    String reqProprietaire = "update proprietaire set adresse = '" + unProprietaire.getAdresse() + "', "
+	            + "cp = '" + unProprietaire.getCp() + "', "
+	            + "ville = '" + unProprietaire.getVille() + "', "
+	            + "RIB = '" + unProprietaire.getRib() + "' "
+	            + "where id_p = " + unProprietaire.getId_user() + ";";
+
+	    try {
+	        uneBdd.seConnecter();
+	        Statement unStat = uneBdd.getMaConnexion().createStatement();
+	        
+	        // On exécute les deux mises à jour
+	        unStat.executeUpdate(reqUser);
+	        unStat.executeUpdate(reqProprietaire);
+
+	        unStat.close();
+	        uneBdd.seDeconnecter();
+	        
+	        System.out.println("Mise à jour réussie pour l'ID : " + unProprietaire.getId_user());
+
+	    } catch (SQLException e) {
+	        System.out.println("Erreur SQL lors de l'update : " + e.getMessage());
+	    }
 	}
+	
 	public static void deleteProprietaire(int idProprietaire) {
-		String requete = "delete from proprietaire where id_p ='"+idProprietaire+"';";
+		String requete = "delete from utilisateur where id_user ='"+idProprietaire+"';";
 		executerRequete(requete);
 	}
+	
 	public static ArrayList<Proprietaire> selectAllProprietaires(String filtre){
 		ArrayList<Proprietaire> lesProprietaires = new ArrayList<Proprietaire>();
-		String requete; 
-		if(filtre.equals("")) {
-			requete = "select * from proprietaire";
+		String requete;
+		
+		if (filtre.equals("")){
+			requete = "select * from utilisateur U inner join proprietaire P on U.id_user = P.id_p where U.role = 'proprietaire';"; 	
 		}else {
-			requete = "select * from proprietaire where nom_p like '%"+filtre+"%' or prenom_p like '%"+filtre+"%';";
-		}
+			requete = "select * from utilisateur U"
+			        + " inner join proprietaire P"
+			        + " on P.id_p = U.id_user"
+			        + " where (U.nom like '%"+filtre+"%'" 
+			        + " or U.prenom like '%"+filtre+"%'"
+			        + " or P.cp like '%"+filtre+"%');";
+			}
+		
 		
 		try {
 			uneBdd.seConnecter();
@@ -221,23 +345,28 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 			ResultSet desResultats = unStat.executeQuery(requete);
 			
 			while (desResultats.next()) {
-				/*Instantiation class proprio*/
-				Proprietaire unProprietaire = new Proprietaire(desResultats.getInt("id_p"),
-						desResultats.getString("nom_p"),desResultats.getString("prenom_p"),desResultats.getString("email_p"),
-						desResultats.getString("mdp_p"),desResultats.getString("adr_p"),desResultats.getString("cp_p"),
-						desResultats.getString("ville_p"),desResultats.getString("tel_p"),desResultats.getString("rib_p"));
+				/*Instantiation class client*/
+				Proprietaire unProprietaire = new Proprietaire(desResultats.getInt("id_user"),
+						desResultats.getString("nom"),desResultats.getString("prenom"),desResultats.getString("email"),
+						desResultats.getString("mdp"),desResultats.getString("tel"),desResultats.getString("role"),
+						desResultats.getString("adresse"),desResultats.getString("cp"),desResultats.getString("ville"),
+						desResultats.getString("RIB"));
+				
 				lesProprietaires.add(unProprietaire);
 			}
 			
 		}catch(SQLException e) {
-			System.out.println("requete incorrect");
+		System.out.println("requete incorrect : " + requete);
 		}
 		return lesProprietaires;
 	}
 	
 	public static Proprietaire selectWhereProprietaire(String email) {
 	    Proprietaire leProprietaire = null;
-	    String requete = "SELECT * FROM proprietaire WHERE email_p = '" + email + "';";
+	    String requete = "select * from utilisateur U"
+		        + " inner join proprietaire P"
+		        + " on P.id_p = U.id_user"
+		        + " where P.email = '"+email+"';";
 
 	    try {
 	        uneBdd.seConnecter();
@@ -246,16 +375,17 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 
 	        if (rs.next()) {
 	            leProprietaire = new Proprietaire(
-	                rs.getInt("id_p"),
-	                rs.getString("nom_p"),
-	                rs.getString("prenom_p"),
-	                rs.getString("email_p"),
-	                rs.getString("mdp_p"),
-	                rs.getString("adr_p"),
-	                rs.getString("cp_p"),
-	                rs.getString("ville_p"),
-	                rs.getString("tel_p"),
-	                rs.getString("rib_p")
+	                rs.getInt("id_user"),
+	                rs.getString("nom"),
+	                rs.getString("prenom"),
+	                rs.getString("email"),
+	                rs.getString("mdp"),
+	                rs.getString("tel"),
+	                rs.getString("role"),
+	                rs.getString("adresse"),
+	                rs.getString("cp"),
+	                rs.getString("ville"),
+	                rs.getString("RIB")
 	            );
 	        }
 

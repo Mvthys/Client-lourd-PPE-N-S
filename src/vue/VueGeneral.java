@@ -28,6 +28,7 @@ public class VueGeneral extends JFrame implements ActionListener, KeyListener{
 	private static PanelProprietaires unPanelProprietaires = new PanelProprietaires("Gestion des proprietaires");
 	private static PanelHabitations unPanelHabitations = new PanelHabitations("Gestion des habitations");
 	private static PanelReservations unPanelReservations = new PanelReservations("Gestion des reservations");
+	private static PanelStats unPanelStats = new PanelStats("Gestion des statistiques");
 	
 	
 	
@@ -71,6 +72,7 @@ public class VueGeneral extends JFrame implements ActionListener, KeyListener{
 		this.add(unPanelProprietaires);
 		this.add(unPanelHabitations);
 		this.add(unPanelReservations);
+		this.add(unPanelStats);
 		
 		this.setVisible(true);
 	}
@@ -80,12 +82,13 @@ public class VueGeneral extends JFrame implements ActionListener, KeyListener{
 		unPanelProprietaires.setVisible(false);
 		unPanelHabitations.setVisible(false);
 		unPanelReservations.setVisible(false);
-		
+		unPanelStats.setVisible(false);
 		switch(choix) {
 			case 1 : unPanelClients.setVisible(true);break;	
 			case 2 : unPanelProprietaires.setVisible(true);break;
 			case 3 : unPanelHabitations.setVisible(true);break;	
 			case 4 : unPanelReservations.setVisible(true);break;
+			case 5 : unPanelStats.setVisible(true);break;
 		}
 	}
 	
@@ -130,6 +133,8 @@ public class VueGeneral extends JFrame implements ActionListener, KeyListener{
 			this.afficherPanel(3);
 		}else if(e.getSource()==this.btReservations) {
 			this.afficherPanel(4);
+		}else if(e.getSource() == this.btStats) {
+			this.afficherPanel(5);
 		}
 	}
 

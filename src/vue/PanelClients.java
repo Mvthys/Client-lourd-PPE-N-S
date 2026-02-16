@@ -170,7 +170,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		Object [] [] matrice = new Object [lesClients.size()][10];
 		int i = 0;
 		for (Client unClient : lesClients) {
-			matrice[i][0] = unClient.getId_c();
+			matrice[i][0] = unClient.getId_user();
 			matrice[i][1] = unClient.getNom();
 			matrice[i][2] = unClient.getPrenom();
 			matrice[i][3] = unClient.getEmail();
@@ -240,7 +240,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv client
-			Client unClient = new Client(idClient,nom,prenom,email,mdp,adresse,cp,ville,tel,RIB);
+			Client unClient = new Client(idClient,nom,prenom,email,mdp,tel,adresse,cp,ville,tel,RIB);
 			//appel de la methode du controleur pour insérer client
 			Controleur.updateClient(unClient);
 			JOptionPane.showMessageDialog(this,"Modification réussie du client");
@@ -280,13 +280,13 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv client
-			Client unClient = new Client(nom,prenom,email,mdp,adresse,cp,ville,tel,RIB);
+			Client unClient = new Client(nom,prenom,email,mdp,tel,adresse,cp,ville,tel,RIB);
 			//appel de la methode du controleur pour insérer client
 			Controleur.insertClient(unClient);
 			JOptionPane.showMessageDialog(this,"Insertion réussie du client");
 			//actualiser l'affichage
 			unClient = Controleur.selectWhereClient(email);
-			Object ligne [] = {unClient.getId_c(),nom,prenom,email,mdp,adresse,cp,ville,tel,RIB};
+			Object ligne [] = {unClient.getId_user(),nom,prenom,email,mdp,adresse,cp,ville,tel,RIB};
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();

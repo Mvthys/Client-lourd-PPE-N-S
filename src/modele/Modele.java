@@ -668,6 +668,44 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 			e.printStackTrace();
 		}
 	}
+	
+	public static int selectCountUtilisateur(String role) {
+		int nb=0;
+		String requete = "select count(*) as nb from utilisateur where role = '"+ role +"';";
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement();
+			ResultSet unRes = unStat.executeQuery(requete);
+			if(unRes.next()) {
+				nb = unRes.getInt("nb");
+			}
+			unStat.close();
+			uneBdd.seDeconnecter();
+			
+		}catch(SQLException e) {
+			System.out.println("erreur requete : " + requete);
+		}
+		return nb;
+	}
+	
+	public static int selectCount(String table) {
+		int nb=0;
+		String requete = "select count(*) as nb from "+ table +";";
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement();
+			ResultSet unRes = unStat.executeQuery(requete);
+			if(unRes.next()) {
+				nb = unRes.getInt("nb");
+			}
+			unStat.close();
+			uneBdd.seDeconnecter();
+			
+		}catch(SQLException e) {
+			System.out.println("erreur requete : " + requete);
+		}
+		return nb;
+	}
 }
 
 

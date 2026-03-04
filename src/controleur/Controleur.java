@@ -92,6 +92,18 @@ public class Controleur {
 	public static void updateReservation(Reservation uneReservation) {
 		Modele.updateReservation(uneReservation);
 	}
+	
+	
+	
+	
+	/********** Autres méthodes **********/
+	public static int selectCountUtilisateur(String role) {
+		return Modele.selectCountUtilisateur(role);
+	}
+	
+	public static int selectCount(String table) {
+		return Modele.selectCount(table);
+	}
 
 
 }

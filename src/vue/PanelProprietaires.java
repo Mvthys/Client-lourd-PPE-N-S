@@ -277,7 +277,17 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 		if(nom.equals("") || prenom.equals("") || email.equals("") || mdp.equals("") || adresse.equals("") || cp.equals("")
 		   || ville.equals("") || tel.equals("") || RIB.equals("")) {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
-		}else {
+		}else if (!Controleur.verifierMdp(mdp)) {
+	        JOptionPane.showMessageDialog(this,
+	                "Le mot de passe doit contenir :\n" +
+	                "- Au moins 12 caractères\n" +
+	                "- Une majuscule\n" +
+	                "- Une minuscule\n" +
+	                "- Un chiffre\n" +
+	                "- Un caractère spécial (+-*/_?,.;/:!$)"
+	            );
+	        }
+		else {
 			//instanciation nv Proprio
 			Proprietaire unProprietaire = new Proprietaire(nom,prenom,email,mdp,adresse,tel,cp,ville,tel,RIB);
 			//appel de la methode du controleur pour insérer proprio

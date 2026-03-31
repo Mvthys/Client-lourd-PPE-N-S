@@ -14,6 +14,15 @@ public class Utilisateur {
         this.tel = tel;
         this.role = role;
     }
+    public Utilisateur(int id_user, String nom, String prenom, String email, String mdp, String tel) {
+    	super();
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.mdp = mdp;
+        this.tel = tel;
+    }
     
     public Utilisateur(String nom, String prenom, String email, String mdp, String tel, String role) {
         super();
@@ -23,6 +32,15 @@ public class Utilisateur {
         this.mdp = mdp;
         this.tel = tel;
         this.role = role;
+    }
+    
+    public Utilisateur(String nom, String prenom, String email, String mdp, String tel) {
+        super();
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.mdp = mdp;
+        this.tel = tel;
     }
     
     public int getId_user() {

@@ -211,7 +211,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	    String requete = "select * from utilisateur U"
 		        + " inner join client C"
 		        + " on C.id_c = U.id_user"
-		        + " where C.email = '"+email+"';";
+		        + " where U.email = '"+email+"';";
 
 	    try {
 	        uneBdd.seConnecter();
@@ -269,7 +269,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	            lastId = rs.getInt(1);
 	        }
 
-	        String reqProprietaire = "insert into proprietaire values ("
+	        String reqProprietaire = "insert into proprietaire (id_p,adresse,cp,ville,RIB) values ("
 	                + lastId + ", '" + unProprietaire.getAdresse() + "', '"
 	                + unProprietaire.getCp() + "', '" + unProprietaire.getVille() + "', '"
 	                + unProprietaire.getRib() + "');";
@@ -368,7 +368,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	    String requete = "select * from utilisateur U"
 		        + " inner join proprietaire P"
 		        + " on P.id_p = U.id_user"
-		        + " where P.email = '"+email+"';";
+		        + " where U.email = '"+email+"';";
 
 	    try {
 	        uneBdd.seConnecter();
@@ -740,7 +740,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 
 	    String requete = "INSERT INTO maison " + 
 	    				 "(type_hab, adr_hab, cp_hab, ville_hab, tarif_hab_bas, tarif_hab_moy, tarif_hab_hau, surface, id_p, description_hab, titre_hab, capacite_hab, carac_m) " 
-	    				 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	    				 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	    try {
 	        uneBdd.seConnecter();
@@ -760,7 +760,8 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	        pst.setInt(9, uneMaison.getIdProprietaire());
 	        pst.setString(10, uneMaison.getDescription());
 	        pst.setString(11, uneMaison.getTitre());
-	        pst.setString(12, uneMaison.getCaracteristique());
+	        pst.setInt(12, uneMaison.getCapacite());	        
+	        pst.setString(13, uneMaison.getCaracteristique());
 
 	        pst.executeUpdate();
 
@@ -870,7 +871,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 
 	    String requete = "INSERT INTO appartement " + 
 	    				 "(type_hab, adr_hab, cp_hab, ville_hab, tarif_hab_bas, tarif_hab_moy, tarif_hab_hau, surface, id_p, description_hab, titre_hab, capacite_hab, etage_ap, type_ap) " 
-	    				 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	    				 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	    try {
 	        uneBdd.seConnecter();

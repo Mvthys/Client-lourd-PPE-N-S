@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,9 +33,10 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 	private JTextField txtVille = new JTextField();
 	private JTextField txtTel = new JTextField();
 	private JTextField txtRIB = new JTextField();
+	private JLabel lbInsertClient = new JLabel("Insérer/Modifier client");
 	
-	private JButton btnAnnuler = new JButton("annuler");
-	private JButton btnValider = new JButton("valider");
+	private JButton btnAnnuler = new JButton("Annuler");
+	private JButton btnValider = new JButton("Valider");
 	
 	private JTable tableClients;
 	private JScrollPane scrollClients;
@@ -42,7 +44,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 	
 	private JPanel panelFiltre = new JPanel();
 	private JTextField txtFiltre = new JTextField();
-	private JButton btFiltrer = new JButton("filtrer");
+	private JButton btFiltrer = new JButton("Filtrer");
 	
 	private JButton btSupprimer = new JButton("Supprimer");
 	private JButton btModifier = new JButton("Modifier");
@@ -52,17 +54,19 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 	public PanelClients(String titre) {
 		super(titre);
 		// TODO Auto-generated constructor stub
-		this.panelFiltre.setBounds(450,40,400,30);
+		this.panelFiltre.setBounds(400,70,500,20);
 		this.panelFiltre.setBackground(new Color(242,242,242));
 		this.panelFiltre.setLayout(new GridLayout(1,3, 5, 5));
-		this.panelFiltre.add(new JLabel("Filtrer les clients par :"));
+		this.panelFiltre.add(new JLabel("Filtrer par :"));
 		this.panelFiltre.add(this.txtFiltre);
 		this.panelFiltre.add(this.btFiltrer);
 		
 		this.add(this.panelFiltre);
 		
+		this.lbInsertClient.setBounds(120,70,300,20);
+		this.add(this.lbInsertClient);
 		
-		this.panelForm.setBounds(10,80,300,400);
+		this.panelForm.setBounds(10,100,350,400);
 		this.panelForm.setBackground(new Color(242,242,242));
 		this.panelForm.setLayout(new GridLayout(11,2, 5, 5));
 		
@@ -90,6 +94,11 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		this.panelForm.add(this.btSupprimer);
 		this.panelForm.add(this.btModifier);
 		
+		this.panelForm.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(Color.BLACK, 1),
+				BorderFactory.createEmptyBorder(10,10,10,10)
+				));
+		
 		this.btSupprimer.setEnabled(false);
 		this.btModifier.setEnabled(false);
 		
@@ -97,11 +106,11 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		
 		
 		//placement JTable
-		String nomsColonnes[] = {"ID client","Nom","Prenom","Email","mdp","Adresse","Code postal","Ville","tel","RIB"};
+		String nomsColonnes[] = {"ID client","Nom","Prenom","Email","mdp","Adresse","Code postal","Ville","Tel","RIB"};
 		this.unTableau = new Tableau(this.obtenirDonnees(""), nomsColonnes);
 		this.tableClients = new JTable(this.unTableau);
 		this.scrollClients = new JScrollPane(this.tableClients);
-		this.scrollClients.setBounds(400,80,500,400);
+		this.scrollClients.setBounds(400,100,500,400);
 		this.scrollClients.setBackground(Color.BLACK);
 		this.add(this.scrollClients);
 		
@@ -240,7 +249,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv client
-			Client unClient = new Client(idClient,nom,prenom,email,mdp,tel,adresse,cp,ville,tel,RIB);
+			Client unClient = new Client(idClient,nom,prenom,email,mdp,tel,adresse,cp,ville,RIB);
 			//appel de la methode du controleur pour insérer client
 			Controleur.updateClient(unClient);
 			JOptionPane.showMessageDialog(this,"Modification réussie du client");
@@ -280,7 +289,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv client
-			Client unClient = new Client(nom,prenom,email,mdp,tel,adresse,cp,ville,tel,RIB);
+			Client unClient = new Client(nom,prenom,email,mdp,tel,adresse,cp,ville,RIB);
 			//appel de la methode du controleur pour insérer client
 			Controleur.insertClient(unClient);
 			JOptionPane.showMessageDialog(this,"Insertion réussie du client");

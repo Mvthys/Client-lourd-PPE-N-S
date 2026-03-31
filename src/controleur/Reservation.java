@@ -3,12 +3,11 @@ package controleur;
 public class Reservation {
 	
 	private int ref_res,nb_perso,id_c,ref_hab;
-	private float prix;
 	private String date_res,date_debut,date_fin,etat_res;
 	
 	
 	public Reservation(int ref_res,String date_res,int nb_perso, String date_debut,String date_fin,String etat_res,
-					   int id_c, int ref_hab, float prix) {
+					   int id_c, int ref_hab) {
 		this.ref_res = ref_res;
 		this.date_res = date_res;
 		this.nb_perso = nb_perso;
@@ -17,10 +16,9 @@ public class Reservation {
 		this.etat_res = etat_res;
 		this.id_c = id_c;
 		this.ref_hab = ref_hab;
-		this.prix = prix;
 	}
 	public Reservation(String date_res,int nb_perso, String date_debut,String date_fin,String etat_res,
-			   		   int id_c, int ref_hab, float prix) {
+			   		   int id_c, int ref_hab) {
 		this.ref_res = 0;
 		this.date_res = date_res;
 		this.nb_perso = nb_perso;
@@ -29,7 +27,6 @@ public class Reservation {
 		this.etat_res = etat_res;
 		this.id_c = id_c;
 		this.ref_hab = ref_hab;
-		this.prix = prix;
 	}
 	
 	
@@ -88,12 +85,4 @@ public class Reservation {
 	public void setRef_hab(int ref_hab) {
 		this.ref_hab = ref_hab;
 	}
-	
-	public float getPrix() {
-		return prix;
-	}
-	public void setPrix(float prix) {
-		this.prix = prix;
-	}
-
 }

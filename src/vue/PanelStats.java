@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -24,9 +25,14 @@ public class PanelStats extends PanelPrincipal implements ActionListener  {
 		super(titre);
 		// TODO Auto-generated constructor stub
 		
-		this.panelCount.setBounds(300,100,500,200);
-		this.panelCount.setBackground(new Color(242,242,242));
-		this.panelCount.setLayout(new GridLayout(2,2, 5, 5));
+		this.panelCount.setBounds(350,70,200,200);
+		this.panelCount.setBackground(new Color(242,242,242,242));
+		this.panelCount.setLayout(new GridLayout(4,1, 5, 5));
+		
+		this.panelCount.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(Color.BLACK, 1),
+				BorderFactory.createEmptyBorder(10, 10, 10, 10)
+				));
 		
 		this.panelCount.add(this.lbClients);
 		this.panelCount.add(this.lbHabitations);

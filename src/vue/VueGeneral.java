@@ -18,16 +18,16 @@ public class VueGeneral extends JFrame implements ActionListener, KeyListener{
 	//creation des boutons
 	private JPanel panelMenu = new JPanel();
 	private JButton btClients = new JButton("Clients");
-	private JButton btProprietaires = new JButton("Proprietaires");
+	private JButton btProprietaires = new JButton("Propriétaires");
 	private JButton btHabitations = new JButton("Habitations");
-	private JButton btReservations = new JButton("Reservations");
+	private JButton btReservations = new JButton("Réservations");
 	private JButton btStats = new JButton("Stats");
 	private JButton btQuitter = new JButton("Quitter");	
 	//Creation des panneaux
 	private static PanelClients unPanelClients = new PanelClients("Gestion des clients");
-	private static PanelProprietaires unPanelProprietaires = new PanelProprietaires("Gestion des proprietaires");
+	private static PanelProprietaires unPanelProprietaires = new PanelProprietaires("Gestion des propriétaires");
 	private static PanelHabitations unPanelHabitations = new PanelHabitations("Gestion des habitations");
-	private static PanelReservations unPanelReservations = new PanelReservations("Gestion des reservations");
+	private static PanelReservations unPanelReservations = new PanelReservations("Gestion des réservations");
 	private static PanelStats unPanelStats = new PanelStats("Gestion des statistiques");
 	
 	

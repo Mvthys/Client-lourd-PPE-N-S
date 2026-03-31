@@ -16,7 +16,7 @@ public abstract class PanelPrincipal extends JPanel {
 		JLabel lbTitre = new JLabel(titre);
 		Font police = new Font("Arial", Font.ITALIC, 18);
 		lbTitre.setFont(police);
-		lbTitre.setBounds(400,10,250,20);
+		lbTitre.setBounds(350,10,250,20);
 		this.add(lbTitre);
 		
 		//si il ya lieu d'une icone pour caractériser panel

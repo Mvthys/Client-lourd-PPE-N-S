@@ -25,7 +25,7 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 	
 	private JPanel panelIcon = new JPanel();
 	private JButton btAnnuler = new JButton("Annuler");
-	private JButton btValider = new JButton("Valider");
+	private JButton btValider = new JButton("Connexion");
 	private JTextField txtEmail = new JTextField();
 	private JPasswordField txtMdp = new JPasswordField();
 	private JLabel Email = new JLabel("Email");

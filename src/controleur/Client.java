@@ -14,9 +14,26 @@ public class Client extends Utilisateur {
 		this.ville = ville;
 		this.rib = rib;
 	}
+	public Client(int id_user,String nom,String prenom,String email,String mdp,String tel,String adresse,String cp,
+			  String ville,String rib){
+		super(id_user,nom,prenom,email,mdp,tel);
+		this.adresse = adresse;
+		this.cp = cp;
+		this.ville = ville;
+		this.rib = rib;
+	}
 	public Client(String nom,String prenom,String email,String mdp,String tel, String role, String adresse,String cp,
 			  String ville,String rib){
 		super(nom,prenom,email,mdp,tel,role);
+		this.adresse = adresse;
+		this.cp = cp;
+		this.ville = ville;
+		this.rib = rib;
+	}
+	
+	public Client(String nom,String prenom,String email,String mdp,String tel, String adresse,String cp,
+			  String ville,String rib){
+		super(nom,prenom,email,mdp,tel);
 		this.adresse = adresse;
 		this.cp = cp;
 		this.ville = ville;

@@ -12,6 +12,14 @@ public class Proprietaire extends Utilisateur {
 		this.ville = ville;
 		this.rib = rib;
 	}
+	public Proprietaire(int id_user,String nom,String prenom,String email,String mdp,String tel,String adresse,String cp,
+			  String ville,String rib){
+	super(id_user,nom,prenom,email,mdp,tel);
+	this.adresse = adresse;
+	this.cp = cp;
+	this.ville = ville;
+	this.rib = rib;
+}
 	public Proprietaire(String nom,String prenom,String email,String mdp,String tel,String role,String adresse,String cp,
 			  String ville,String rib){
 		super(nom,prenom,email,mdp,tel,role);
@@ -20,7 +28,14 @@ public class Proprietaire extends Utilisateur {
 		this.ville = ville;
 		this.rib = rib;
 	}
-	
+	public Proprietaire(String nom,String prenom,String email,String mdp,String tel,String adresse,String cp,
+			  String ville,String rib){
+		super(nom,prenom,email,mdp,tel);
+		this.adresse = adresse;
+		this.cp = cp;
+		this.ville = ville;
+		this.rib = rib;
+	}
 	
 	
 	public String getAdresse() {

@@ -44,8 +44,6 @@ public class Maison {
 	}
 	
 	
-	
-	
 	public int getRef_hab() {
 		return ref_hab;
 	}

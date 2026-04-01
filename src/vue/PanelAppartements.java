@@ -280,6 +280,9 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 			Controleur.deleteAppartement(refHab);
 			JOptionPane.showMessageDialog(this, "Suppression habitation effectuée avec succés");
 			this.viderChamps();
+			this.btSupprimer.setEnabled(false);
+			this.btModifier.setEnabled(false);
+			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbHabitations.setText("Nombre d'appartements : "+unTableau.getRowCount());
 		}
@@ -320,6 +323,9 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 					this.unTableau.ajoutLigne(ligne);
 					//vider les champs
 					this.viderChamps();
+					this.btSupprimer.setEnabled(false);
+					this.btModifier.setEnabled(false);
+					this.btnValider.setEnabled(true);
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbHabitations.setText("Nombre d'appartemetns : "+unTableau.getRowCount());
 				}
@@ -373,6 +379,8 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();
+			this.unTableau.setDonnes(this.obtenirDonnees(""));
+			this.lbNbHabitations.setText("Nombre d'appartements : "+unTableau.getRowCount());
 		}
 	}
 

@@ -413,8 +413,9 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 						 +uneHabitation.getAdresse()+"',cp_hab ='"+uneHabitation.getCp()+"', ville_hab ='"
 						 +uneHabitation.getVille()+"', tarif_hab_bas ='"+uneHabitation.getTarifBas()+"',tarif_hab_moy ='"
 						 +uneHabitation.getTarifMoy()+"',tarif_hab_hau ='"+uneHabitation.getTarifHaut()+"', surface ='"
-						 +uneHabitation.getSurface()+"', id_p='"+uneHabitation.getIdProprietaire()+"' where ref_hab = '"
-						 +uneHabitation.getRef_hab()+"';";
+						 +uneHabitation.getSurface()+"', id_p='"+uneHabitation.getIdProprietaire()+"', description_hab ='"
+						 +uneHabitation.getDescription()+"', titre_hab = '"+uneHabitation.getTitre()+"', capacite_hab ='"
+						 +uneHabitation.getCapacite()+"' where ref_hab = '"+uneHabitation.getRef_hab()+"';";
 		
 		executerRequete(requete);
 	}
@@ -657,11 +658,13 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	//maison	
 	
 	public static void updateMaison(Maison uneMaison) {
-		String requete = "update maison set type_hab ='"+uneMaison.getType()+"',adr_hab ='"
-						 +uneMaison.getAdresse()+"',cp_hab ='"+uneMaison.getCp()+"', ville_hab ='"
-						 +uneMaison.getVille()+"', tarif_hab_bas ='"+uneMaison.getTarifBas()+"',tarif_hab_moy ='"
-						 +uneMaison.getTarifMoy()+"',tarif_hab_hau ='"+uneMaison.getTarifHaut()+"', surface ='"
-						 +uneMaison.getSurface()+"', id_p='"+uneMaison.getIdProprietaire()+"' where ref_hab = '"
+		String requete = "update maison set type_hab ='"+uneMaison.getType()+"', adr_hab ='"
+						 +uneMaison.getAdresse()+"', cp_hab ='"+uneMaison.getCp()+"', ville_hab ='"
+						 +uneMaison.getVille()+"', tarif_hab_bas ='"+uneMaison.getTarifBas()+"', tarif_hab_moy ='"
+						 +uneMaison.getTarifMoy()+"', tarif_hab_hau ='"+uneMaison.getTarifHaut()+"', surface ='"
+						 +uneMaison.getSurface()+"', id_p='"+uneMaison.getIdProprietaire()+"', description_hab = '"
+						 +uneMaison.getDescription()+"', titre_hab = '"+uneMaison.getTitre()+"', capacite_hab = '"
+						 +uneMaison.getCapacite()+"', carac_m = '"+uneMaison.getCaracteristique()+"' where ref_hab = '"
 						 +uneMaison.getRef_hab()+"';";
 		
 		executerRequete(requete);
@@ -786,12 +789,14 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	//appartements
 	
 	public static void updateAppartement(Appartement unAppartement) {
-		String requete = "update Appartement set type_hab ='"+unAppartement.getType()+"',adr_hab ='"
-						 +unAppartement.getAdresse()+"',cp_hab ='"+unAppartement.getCp()+"', ville_hab ='"
-						 +unAppartement.getVille()+"', tarif_hab_bas ='"+unAppartement.getTarifBas()+"',tarif_hab_moy ='"
-						 +unAppartement.getTarifMoy()+"',tarif_hab_hau ='"+unAppartement.getTarifHaut()+"', surface ='"
-						 +unAppartement.getSurface()+"', id_p='"+unAppartement.getIdProprietaire()+"' where ref_hab = '"
-						 +unAppartement.getRef_hab()+"';";
+		String requete = "update Appartement set type_hab ='"+unAppartement.getType()+"', adr_hab ='"
+						 +unAppartement.getAdresse()+"', cp_hab ='"+unAppartement.getCp()+"', ville_hab ='"
+						 +unAppartement.getVille()+"', tarif_hab_bas ='"+unAppartement.getTarifBas()+"', tarif_hab_moy ='"
+						 +unAppartement.getTarifMoy()+"', tarif_hab_hau ='"+unAppartement.getTarifHaut()+"', surface ='"
+						 +unAppartement.getSurface()+"', id_p='"+unAppartement.getIdProprietaire()+"', description_hab = '"
+						 +unAppartement.getDescription()+"', titre_hab = '"+unAppartement.getTitre()+"', capacite_hab = '"
+						 +unAppartement.getCapacite()+"', etage_ap = '"+unAppartement.getEtage()+"', type_ap = '"
+						 +unAppartement.getTypeap()+"' where ref_hab = '"+unAppartement.getRef_hab()+"';";
 		
 		executerRequete(requete);
 	}

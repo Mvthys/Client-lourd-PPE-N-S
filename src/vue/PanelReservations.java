@@ -260,6 +260,9 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 			Controleur.deleteReservation(refRes);
 			JOptionPane.showMessageDialog(this, "Suppression réservation effectuée avec succés");
 			this.viderChamps();
+			this.btModifier.setEnabled(false);
+			this.btSupprimer.setEnabled(false);
+			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
 		}
@@ -294,6 +297,9 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 					this.unTableau.ajoutLigne(ligne);
 					//vider les champs
 					this.viderChamps();
+					this.btModifier.setEnabled(false);
+					this.btSupprimer.setEnabled(false);
+					this.btnAnnuler.setEnabled(true);
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
 				}
@@ -339,6 +345,8 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();
+			this.unTableau.setDonnes(this.obtenirDonnees(""));
+			this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
 		}
 	}
 	

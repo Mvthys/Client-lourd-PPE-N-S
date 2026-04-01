@@ -274,6 +274,9 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 			Controleur.deleteMaison(refHab);
 			JOptionPane.showMessageDialog(this, "Suppression habitation effectuée avec succés");
 			this.viderChamps();
+			this.btSupprimer.setEnabled(false);
+			this.btModifier.setEnabled(false);
+			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbHabitations.setText("Nombre d'habitations : "+unTableau.getRowCount());
 		}
@@ -312,6 +315,9 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 					this.unTableau.ajoutLigne(ligne);
 					//vider les champs
 					this.viderChamps();
+					this.btSupprimer.setEnabled(false);
+					this.btModifier.setEnabled(false);
+					this.btnValider.setEnabled(true);
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbHabitations.setText("Nombre de maison : "+unTableau.getRowCount());
 				}
@@ -353,9 +359,9 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		   tarifMoy.equals("") || tarifHaut.equals("") || surface.equals("") || txtIdProprietaire.getSelectedItem().toString().isEmpty()){
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
-			//instanciation nv Proprio
+			//instanciation nv maison
 			Maison uneMaison = new Maison("maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac);
-			//appel de la methode du controleur pour insérer habitation
+			//appel de la methode du controleur pour insérer maison
 			int idGenere = Controleur.insertMaison(uneMaison);
 			JOptionPane.showMessageDialog(this,"Insertion réussie de la maison");
 			//actualiser l'affichage
@@ -363,6 +369,8 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();
+			this.unTableau.setDonnes(this.obtenirDonnees(""));
+			this.lbNbHabitations.setText("Nombre d'habitations : "+unTableau.getRowCount());
 		}
 	}
 

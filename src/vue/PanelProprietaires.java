@@ -228,6 +228,9 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			Controleur.deleteProprietaire(idProprietaire);
 			JOptionPane.showMessageDialog(this,"Proprietaire supprimé avec succés.");
 			this.viderChamps();
+			this.btSupprimer.setEnabled(false);
+			this.btModifier.setEnabled(false);
+			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbProprietaires.setText("Nombre de Proprietaires : "+unTableau.getRowCount());
 		}
@@ -256,6 +259,9 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 					Controleur.updateProprietaire(unProprietaire);
 					JOptionPane.showMessageDialog(this,"Modification réussie du proprietaire");
 					this.viderChamps();
+					this.btSupprimer.setEnabled(false);
+					this.btModifier.setEnabled(false);
+					this.btnValider.setEnabled(true);
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbProprietaires.setText("Nombre de Proprietaires : "+unTableau.getRowCount());
 				}
@@ -299,6 +305,8 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();
+			this.unTableau.setDonnes(this.obtenirDonnees(""));
+			this.lbNbProprietaires.setText("Nombre de Proprietaires : "+unTableau.getRowCount());
 		}
 	}
 }

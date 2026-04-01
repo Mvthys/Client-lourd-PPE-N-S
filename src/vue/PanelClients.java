@@ -226,6 +226,9 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			Controleur.deleteClient(idClient);
 			JOptionPane.showMessageDialog(this,"client supprimmé avec succés.");
 			this.viderChamps();
+			this.btSupprimer.setEnabled(false);
+			this.btModifier.setEnabled(false);
+			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbClients.setText("Nombre de clients : "+unTableau.getRowCount());
 		}
@@ -255,6 +258,9 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Modification réussie du client");
 			//vider les champs
 			this.viderChamps();
+			this.btSupprimer.setEnabled(false);
+			this.btModifier.setEnabled(false);
+			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbClients.setText("Nombre de clients : "+unTableau.getRowCount());
 		}
@@ -299,6 +305,8 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();
+			this.unTableau.setDonnes(this.obtenirDonnees(""));
+			this.lbNbClients.setText("Nombre de clients : "+unTableau.getRowCount());
 		}
 	}
 	

@@ -347,7 +347,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 			ResultSet desResultats = unStat.executeQuery(requete);
 			
 			while (desResultats.next()) {
-				/*Instantiation class client*/
+				/*Instantiation class Proprietaire*/
 				Proprietaire unProprietaire = new Proprietaire(desResultats.getInt("id_user"),
 						desResultats.getString("nom"),desResultats.getString("prenom"),desResultats.getString("email"),
 						desResultats.getString("mdp"),desResultats.getString("tel"),desResultats.getString("role"),

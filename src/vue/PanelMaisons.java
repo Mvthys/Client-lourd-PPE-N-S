@@ -1,7 +1,6 @@
 package vue;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -39,12 +37,10 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 	private JTextField txtTitre = new JTextField();
 	private JTextField txtCapacite = new JTextField();
 	private JTextField txtCarac = new JTextField();
-	private JLabel lbTitreMaison = new JLabel("Maisons");
-	private Font police = new Font("Arial", Font.ITALIC, 18);
-	private JLabel lbInsertMaison = new JLabel("Insérer/Modifier maison");
 	
-	private JButton btnAnnuler = new JButton("Annuler");
-	private JButton btnValider = new JButton("Valider");
+	
+	private JButton btnAnnuler = new JButton("annuler");
+	private JButton btnValider = new JButton("valider");
 	
 	private JTable tableHabitations;
 	private JScrollPane scrollHabitations;
@@ -52,7 +48,7 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 	
 	private JPanel panelFiltre = new JPanel();
 	private JTextField txtFiltre = new JTextField();
-	private JButton btFiltrer = new JButton("Filtrer");
+	private JButton btFiltrer = new JButton("filtrer");
 	
 	private JButton btSupprimer = new JButton("Supprimer");
 	private JButton btModifier = new JButton("Modifier");
@@ -62,23 +58,16 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 	public PanelMaisons(String titre) {
 		super(titre);
 		// TODO Auto-generated constructor stub
-		this.lbTitreMaison.setBounds(600,10,500,20);
-		this.lbTitreMaison.setFont(this.police);
-		this.add(this.lbTitreMaison);
-		
-		this.panelFiltre.setBounds(400,50,500,20);
+		this.panelFiltre.setBounds(400,40,500,20);
 		this.panelFiltre.setBackground(new Color(242,242,242));
 		this.panelFiltre.setLayout(new GridLayout(1,3, 5, 5));
-		this.panelFiltre.add(new JLabel("Filtrer par :"));
+		this.panelFiltre.add(new JLabel("Filtrer les maisons par :"));
 		this.panelFiltre.add(this.txtFiltre);
 		this.panelFiltre.add(this.btFiltrer);
 		
 		this.add(this.panelFiltre);
 		
-		this.lbInsertMaison.setBounds(120,50,200,20);
-		this.add(this.lbInsertMaison);
-		
-		this.panelForm.setBounds(10,80,350,400);
+		this.panelForm.setBounds(10,80,300,400);
 		this.panelForm.setBackground(new Color(242,242,242));
 		this.panelForm.setLayout(null);
 		this.panelForm.setLayout(new GridLayout(14,2, 5, 5));
@@ -113,11 +102,6 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		this.panelForm.add(this.btSupprimer);
 		this.panelForm.add(this.btModifier);
 		
-		this.panelForm.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(Color.BLACK, 1),
-				BorderFactory.createEmptyBorder(10,10,10,10)
-				));
-		
 		this.btSupprimer.setEnabled(false);
 		this.btModifier.setEnabled(false);
 		
@@ -137,8 +121,8 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		this.add(this.scrollHabitations);
 		
 		//Ajouter lbNbHab
-		this.lbNbHabitations.setBounds(600,480,400,20);
-		this.lbNbHabitations.setText("Nombre de maisons : "+unTableau.getRowCount());
+		this.lbNbHabitations.setBounds(600,500,400,20);
+		this.lbNbHabitations.setText("Nombre de maison : "+unTableau.getRowCount());
 		this.add(this.lbNbHabitations);
 		
 		//rendre btn ecoutables
@@ -186,14 +170,7 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 				txtTarifMoy.setText(unTableau.getValueAt(numLigne,6).toString());
 				txtTarifHaut.setText(unTableau.getValueAt(numLigne,7).toString());
 				txtSurface.setText(unTableau.getValueAt(numLigne,8).toString());
-				String idProprietaire = unTableau.getValueAt(numLigne, 9).toString();
-				for (int i = 0; i < txtIdProprietaire.getItemCount(); i++) {
-				    String item = txtIdProprietaire.getItemAt(i).toString();
-				    if (item.split("-")[0].equals(idProprietaire)) {
-				        txtIdProprietaire.setSelectedIndex(i);
-				        break;
-				        }
-				    }
+				txtIdProprietaire.setSelectedItem(unTableau.getValueAt(numLigne,9).toString());
 				txtDescription.setText(unTableau.getValueAt(numLigne,10).toString());
 				txtTitre.setText(unTableau.getValueAt(numLigne,11).toString());
 				txtCapacite.setText(unTableau.getValueAt(numLigne,12).toString());
@@ -274,9 +251,6 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 			Controleur.deleteMaison(refHab);
 			JOptionPane.showMessageDialog(this, "Suppression habitation effectuée avec succés");
 			this.viderChamps();
-			this.btSupprimer.setEnabled(false);
-			this.btModifier.setEnabled(false);
-			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbHabitations.setText("Nombre d'habitations : "+unTableau.getRowCount());
 		}
@@ -315,9 +289,6 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 					this.unTableau.ajoutLigne(ligne);
 					//vider les champs
 					this.viderChamps();
-					this.btSupprimer.setEnabled(false);
-					this.btModifier.setEnabled(false);
-					this.btnValider.setEnabled(true);
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbHabitations.setText("Nombre de maison : "+unTableau.getRowCount());
 				}
@@ -335,43 +306,59 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		this.txtTitre.setText("");
 		this.txtCapacite.setText("");
 		this.txtCarac.setText("");
-		this.txtIdProprietaire.setSelectedIndex(0);
 	}
 	
 	public void insertMaison() {
-		String adresse = this.txtAdresse.getText();
-		String cp = this.txtCp.getText();
-		String ville = this.txtVille.getText();
-		String tarifBas = this.txtTarifBas.getText();
-		String tarifMoy = this.txtTarifMoy.getText();
-		String tarifHaut = this.txtTarifHaut.getText();
-		String surface = this.txtSurface.getText();
-		String chaine = txtIdProprietaire.getSelectedItem().toString();
-		String tab[] = chaine.split("-");
-		int idProprietaire = Integer.parseInt(tab[0]);
-		String description = this.txtDescription.getText();
-		String titre = this.txtTitre.getText();
-		int capacite = Integer.parseInt(this.txtCapacite.getText());
-		String carac = this.txtCarac.getText();
+	    // SUPPRIME les lignes qui appellent getSelectedRow et getValueAt
+	    
+	    String adresse = this.txtAdresse.getText();
+	    String cp = this.txtCp.getText();
+	    String ville = this.txtVille.getText();
+	    String tarifBas = this.txtTarifBas.getText();
+	    String tarifMoy = this.txtTarifMoy.getText();
+	    String tarifHaut = this.txtTarifHaut.getText();
+	    String surface = this.txtSurface.getText();
+	    
+	    // Gestion du ComboBox Propriétaire
+	    String chaine = txtIdProprietaire.getSelectedItem().toString();
+	    if (chaine.equals(" Selectionner ")) {
+	        JOptionPane.showMessageDialog(this, "Veuillez sélectionner un propriétaire");
+	        return;
+	    }
+	    String tab[] = chaine.split("-");
+	    int idProprietaire = Integer.parseInt(tab[0]);
+	    
+	    String description = this.txtDescription.getText();
+	    String titre = this.txtTitre.getText();
+	    
+	    // CORRECTION : Récupérer la capacité depuis le champ texte, pas la table !
+	    int capacite = 0;
+	    try {
+	        capacite = Integer.parseInt(this.txtCapacite.getText());
+	    } catch (NumberFormatException e) {
+	        JOptionPane.showMessageDialog(this, "La capacité doit être un nombre");
+	        return;
+	    }
+	    
+	    String carac = this.txtCarac.getText();
 
-		
-		if(adresse.equals("") || cp.equals("") || ville.equals("") || tarifBas.equals("") || 
-		   tarifMoy.equals("") || tarifHaut.equals("") || surface.equals("") || txtIdProprietaire.getSelectedItem().toString().isEmpty()){
-			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
-		}else {
-			//instanciation nv maison
-			Maison uneMaison = new Maison("maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac);
-			//appel de la methode du controleur pour insérer maison
-			int idGenere = Controleur.insertMaison(uneMaison);
-			JOptionPane.showMessageDialog(this,"Insertion réussie de la maison");
-			//actualiser l'affichage
-			Object ligne [] = {uneMaison.getRef_hab(),"maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac};
-			this.unTableau.ajoutLigne(ligne);
-			//vider les champs
-			this.viderChamps();
-			this.unTableau.setDonnes(this.obtenirDonnees(""));
-			this.lbNbHabitations.setText("Nombre d'habitations : "+unTableau.getRowCount());
-		}
+	    if(adresse.equals("") || cp.equals("") || ville.equals("") || tarifBas.equals("") || 
+	       tarifMoy.equals("") || tarifHaut.equals("") || surface.equals("")){
+	        JOptionPane.showMessageDialog(this,"Veuillez remplir tous les champs");
+	    } else {
+	        Maison uneMaison = new Maison("maison", adresse, cp, ville, tarifBas, tarifMoy, 
+	                                      tarifHaut, surface, idProprietaire, description, titre, capacite, carac);
+	        
+	        int idGenere = Controleur.insertMaison(uneMaison);
+	        
+	        if (idGenere != 0) {
+	            JOptionPane.showMessageDialog(this, "Insertion réussie de la maison");
+	            this.unTableau.setDonnes(this.obtenirDonnees("")); // Actualise toute la table
+	            this.viderChamps();
+	        } else {
+	            JOptionPane.showMessageDialog(this, "Erreur lors de l'insertion en base de données");
+	        }
+	    }
 	}
 
 }

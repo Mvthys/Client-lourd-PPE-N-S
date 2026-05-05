@@ -52,6 +52,33 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 		}
 		return unUtilisateur;
 	}
+
+public static ArrayList<Utilisateur> selectAllUtilisateurClient(String filtre){
+	ArrayList<Utilisateur> lesUtilisateurs = new ArrayList<Utilisateur>();
+	String requete;
+	
+	requete = "select * from utilisateur where role = 'client';";
+	
+	
+	try {
+		uneBdd.seConnecter();
+		Statement unStat = uneBdd.getMaConnexion().createStatement();
+		ResultSet desResultats = unStat.executeQuery(requete);
+		
+		while (desResultats.next()) {
+			/*Instantiation class client*/
+			Utilisateur unUtilisateur = new Utilisateur(desResultats.getInt("id_user"),
+					desResultats.getString("nom"),desResultats.getString("prenom"),desResultats.getString("email"),
+					desResultats.getString("mdp"),desResultats.getString("tel"),desResultats.getString("role"));
+			
+			lesUtilisateurs.add(unUtilisateur);
+		}
+		
+	}catch(SQLException e) {
+	System.out.println("requete incorrect : " + requete);
+	}
+	return lesUtilisateurs;
+}
 	
 	
 	/*** Admin ***/
@@ -95,9 +122,9 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	/*** Clients ***/
 	
 	public static void insertClient(Client unClient) {
-	    String reqUser = "insert into utilisateur values (null, '"
+	    String reqUser = "insert into utilisateur (id_user,nom,prenom,email,mdp,date_mdp,tel,role) values (null, '"
 	            + unClient.getNom() + "', '" + unClient.getPrenom() + "', '"
-	            + unClient.getEmail() + "', '" + unClient.getMdp() + "', '"
+	            + unClient.getEmail() + "', '" + unClient.getMdp() + "',curdate(), '"
 	            + unClient.getTel() + "', 'client');";
 
 	    try {
@@ -112,7 +139,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	            lastId = rs.getInt(1);
 	        }
 
-	        String reqClient = "insert into client values ("
+	        String reqClient = "insert into client (id_c,adresse,cp,ville,rib) values ("
 	                + lastId + ", '" + unClient.getAdresse() + "', '"
 	                + unClient.getCp() + "', '" + unClient.getVille() + "', '"
 	                + unClient.getRib() + "');";
@@ -211,7 +238,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	    String requete = "select * from utilisateur U"
 		        + " inner join client C"
 		        + " on C.id_c = U.id_user"
-		        + " where U.email = '"+email+"';";
+		        + " where U.email = '"+email+"' and role = 'client';";
 
 	    try {
 	        uneBdd.seConnecter();
@@ -252,9 +279,9 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	/*** Proprietaires ***/
 	
 	public static void insertProprietaire(Proprietaire unProprietaire) {
-		String reqUser = "insert into utilisateur values (null, '"
+		String reqUser = "insert into utilisateur (id_user,nom,prenom,email,mdp,date_mdp,tel,role) values (null, '"
 	            + unProprietaire.getNom() + "', '" + unProprietaire.getPrenom() + "', '"
-	            + unProprietaire.getEmail() + "', '" + unProprietaire.getMdp() + "', '"
+	            + unProprietaire.getEmail() + "', '" + unProprietaire.getMdp() + "',  curdate(),'"
 	            + unProprietaire.getTel() + "', 'proprietaire');";
 
 	    try {
@@ -269,7 +296,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	            lastId = rs.getInt(1);
 	        }
 
-	        String reqProprietaire = "insert into proprietaire (id_p,adresse,cp,ville,RIB) values ("
+	        String reqProprietaire = "insert into proprietaire (id_p,adresse,cp,ville,rib) values ("
 	                + lastId + ", '" + unProprietaire.getAdresse() + "', '"
 	                + unProprietaire.getCp() + "', '" + unProprietaire.getVille() + "', '"
 	                + unProprietaire.getRib() + "');";
@@ -347,7 +374,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 			ResultSet desResultats = unStat.executeQuery(requete);
 			
 			while (desResultats.next()) {
-				/*Instantiation class Proprietaire*/
+				/*Instantiation class proprietaire*/
 				Proprietaire unProprietaire = new Proprietaire(desResultats.getInt("id_user"),
 						desResultats.getString("nom"),desResultats.getString("prenom"),desResultats.getString("email"),
 						desResultats.getString("mdp"),desResultats.getString("tel"),desResultats.getString("role"),
@@ -413,9 +440,8 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 						 +uneHabitation.getAdresse()+"',cp_hab ='"+uneHabitation.getCp()+"', ville_hab ='"
 						 +uneHabitation.getVille()+"', tarif_hab_bas ='"+uneHabitation.getTarifBas()+"',tarif_hab_moy ='"
 						 +uneHabitation.getTarifMoy()+"',tarif_hab_hau ='"+uneHabitation.getTarifHaut()+"', surface ='"
-						 +uneHabitation.getSurface()+"', id_p='"+uneHabitation.getIdProprietaire()+"', description_hab ='"
-						 +uneHabitation.getDescription()+"', titre_hab = '"+uneHabitation.getTitre()+"', capacite_hab ='"
-						 +uneHabitation.getCapacite()+"' where ref_hab = '"+uneHabitation.getRef_hab()+"';";
+						 +uneHabitation.getSurface()+"', id_p='"+uneHabitation.getIdProprietaire()+"' where ref_hab = '"
+						 +uneHabitation.getRef_hab()+"';";
 		
 		executerRequete(requete);
 	}
@@ -658,13 +684,11 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	//maison	
 	
 	public static void updateMaison(Maison uneMaison) {
-		String requete = "update maison set type_hab ='"+uneMaison.getType()+"', adr_hab ='"
-						 +uneMaison.getAdresse()+"', cp_hab ='"+uneMaison.getCp()+"', ville_hab ='"
-						 +uneMaison.getVille()+"', tarif_hab_bas ='"+uneMaison.getTarifBas()+"', tarif_hab_moy ='"
-						 +uneMaison.getTarifMoy()+"', tarif_hab_hau ='"+uneMaison.getTarifHaut()+"', surface ='"
-						 +uneMaison.getSurface()+"', id_p='"+uneMaison.getIdProprietaire()+"', description_hab = '"
-						 +uneMaison.getDescription()+"', titre_hab = '"+uneMaison.getTitre()+"', capacite_hab = '"
-						 +uneMaison.getCapacite()+"', carac_m = '"+uneMaison.getCaracteristique()+"' where ref_hab = '"
+		String requete = "update maison set type_hab ='"+uneMaison.getType()+"',adr_hab ='"
+						 +uneMaison.getAdresse()+"',cp_hab ='"+uneMaison.getCp()+"', ville_hab ='"
+						 +uneMaison.getVille()+"', tarif_hab_bas ='"+uneMaison.getTarifBas()+"',tarif_hab_moy ='"
+						 +uneMaison.getTarifMoy()+"',tarif_hab_hau ='"+uneMaison.getTarifHaut()+"', surface ='"
+						 +uneMaison.getSurface()+"', id_p='"+uneMaison.getIdProprietaire()+"' where ref_hab = '"
 						 +uneMaison.getRef_hab()+"';";
 		
 		executerRequete(requete);
@@ -763,7 +787,7 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	        pst.setInt(9, uneMaison.getIdProprietaire());
 	        pst.setString(10, uneMaison.getDescription());
 	        pst.setString(11, uneMaison.getTitre());
-	        pst.setInt(12, uneMaison.getCapacite());	        
+	        pst.setInt(12, uneMaison.getCapacite());
 	        pst.setString(13, uneMaison.getCaracteristique());
 
 	        pst.executeUpdate();
@@ -789,14 +813,12 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 	//appartements
 	
 	public static void updateAppartement(Appartement unAppartement) {
-		String requete = "update Appartement set type_hab ='"+unAppartement.getType()+"', adr_hab ='"
-						 +unAppartement.getAdresse()+"', cp_hab ='"+unAppartement.getCp()+"', ville_hab ='"
-						 +unAppartement.getVille()+"', tarif_hab_bas ='"+unAppartement.getTarifBas()+"', tarif_hab_moy ='"
-						 +unAppartement.getTarifMoy()+"', tarif_hab_hau ='"+unAppartement.getTarifHaut()+"', surface ='"
-						 +unAppartement.getSurface()+"', id_p='"+unAppartement.getIdProprietaire()+"', description_hab = '"
-						 +unAppartement.getDescription()+"', titre_hab = '"+unAppartement.getTitre()+"', capacite_hab = '"
-						 +unAppartement.getCapacite()+"', etage_ap = '"+unAppartement.getEtage()+"', type_ap = '"
-						 +unAppartement.getTypeap()+"' where ref_hab = '"+unAppartement.getRef_hab()+"';";
+		String requete = "update Appartement set type_hab ='"+unAppartement.getType()+"',adr_hab ='"
+						 +unAppartement.getAdresse()+"',cp_hab ='"+unAppartement.getCp()+"', ville_hab ='"
+						 +unAppartement.getVille()+"', tarif_hab_bas ='"+unAppartement.getTarifBas()+"',tarif_hab_moy ='"
+						 +unAppartement.getTarifMoy()+"',tarif_hab_hau ='"+unAppartement.getTarifHaut()+"', surface ='"
+						 +unAppartement.getSurface()+"', id_p='"+unAppartement.getIdProprietaire()+"' where ref_hab = '"
+						 +unAppartement.getRef_hab()+"';";
 		
 		executerRequete(requete);
 	}

@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,10 +32,9 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 	private JTextField txtVille = new JTextField();
 	private JTextField txtTel = new JTextField();
 	private JTextField txtRIB = new JTextField();
-	private JLabel lbInsertProprietaire = new JLabel("Insérer/Modifier propriétaire");
 	
-	private JButton btnAnnuler = new JButton("Annuler");
-	private JButton btnValider = new JButton("Valider");
+	private JButton btnAnnuler = new JButton("annuler");
+	private JButton btnValider = new JButton("valider");
 	
 	private JTable tableProprietaires;
 	private JScrollPane scrollProprietaires;
@@ -44,7 +42,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 	
 	private JPanel panelFiltre = new JPanel();
 	private JTextField txtFiltre = new JTextField();
-	private JButton btFiltrer = new JButton("Filtrer");
+	private JButton btFiltrer = new JButton("filtrer");
 	
 	private JButton btSupprimer = new JButton("Supprimer");
 	private JButton btModifier = new JButton("Modifier");
@@ -54,19 +52,16 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 	public PanelProprietaires(String titre) {
 		super(titre);
 		// TODO Auto-generated constructor stub
-		this.panelFiltre.setBounds(400,70,500,20);
+		this.panelFiltre.setBounds(400,40,500,20);
 		this.panelFiltre.setBackground(new Color(242,242,242));
 		this.panelFiltre.setLayout(new GridLayout(1,3, 5, 5));
-		this.panelFiltre.add(new JLabel("Filtrer par :"));
+		this.panelFiltre.add(new JLabel("Filtrer les proprietaires par :"));
 		this.panelFiltre.add(this.txtFiltre);
 		this.panelFiltre.add(this.btFiltrer);
 		
 		this.add(this.panelFiltre);
 		
-		this.lbInsertProprietaire.setBounds(120,70,200,20);
-		this.add(this.lbInsertProprietaire);
-		
-		this.panelForm.setBounds(10,100,350,400);
+		this.panelForm.setBounds(10,80,300,400);
 		this.panelForm.setBackground(new Color(242,242,242));
 		this.panelForm.setLayout(null);
 		this.panelForm.setLayout(new GridLayout(11,2, 5, 5));
@@ -95,11 +90,6 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 		this.panelForm.add(this.btSupprimer);
 		this.panelForm.add(this.btModifier);
 		
-		this.panelForm.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(Color.BLACK, 1),
-				BorderFactory.createEmptyBorder(10, 10, 10, 10)
-				));
-		
 		this.btSupprimer.setEnabled(false);
 		this.btModifier.setEnabled(false);
 		
@@ -111,7 +101,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 		this.unTableau = new Tableau(this.obtenirDonnees(""), nomsColonnes);
 		this.tableProprietaires = new JTable(this.unTableau);
 		this.scrollProprietaires = new JScrollPane(this.tableProprietaires);
-		this.scrollProprietaires.setBounds(400,100,500,400);
+		this.scrollProprietaires.setBounds(400,80,500,400);
 		this.scrollProprietaires.setBackground(Color.BLACK);
 		this.add(this.scrollProprietaires);
 		
@@ -228,9 +218,6 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			Controleur.deleteProprietaire(idProprietaire);
 			JOptionPane.showMessageDialog(this,"Proprietaire supprimé avec succés.");
 			this.viderChamps();
-			this.btSupprimer.setEnabled(false);
-			this.btModifier.setEnabled(false);
-			this.btnValider.setEnabled(true);
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbProprietaires.setText("Nombre de Proprietaires : "+unTableau.getRowCount());
 		}
@@ -254,14 +241,11 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 					JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 				}else {
 					//instanciation nv Proprio
-					Proprietaire unProprietaire = new Proprietaire(idProprietaire,nom,prenom,email,mdp,tel,adresse,cp,ville,RIB);
+					Proprietaire unProprietaire = new Proprietaire(idProprietaire,nom,prenom,email,mdp,tel,adresse,cp,ville,tel,RIB);
 					//appel de la methode du controleur pour insérer proprio
 					Controleur.updateProprietaire(unProprietaire);
 					JOptionPane.showMessageDialog(this,"Modification réussie du proprietaire");
 					this.viderChamps();
-					this.btSupprimer.setEnabled(false);
-					this.btModifier.setEnabled(false);
-					this.btnValider.setEnabled(true);
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbProprietaires.setText("Nombre de Proprietaires : "+unTableau.getRowCount());
 				}
@@ -295,7 +279,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv Proprio
-			Proprietaire unProprietaire = new Proprietaire(nom,prenom,email,mdp,tel,adresse,cp,ville,RIB);
+			Proprietaire unProprietaire = new Proprietaire(nom,prenom,email,mdp,tel,"proprietaire",adresse,cp,ville,RIB);
 			//appel de la methode du controleur pour insérer proprio
 			Controleur.insertProprietaire(unProprietaire);
 			JOptionPane.showMessageDialog(this,"Insertion réussie du proprietaire");
@@ -305,8 +289,6 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();
-			this.unTableau.setDonnes(this.obtenirDonnees(""));
-			this.lbNbProprietaires.setText("Nombre de Proprietaires : "+unTableau.getRowCount());
 		}
 	}
 }

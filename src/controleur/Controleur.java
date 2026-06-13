@@ -35,8 +35,6 @@ public class Controleur {
 	}
 	
 	
-	
-	
 	//Proprio
 	public static void insertProprietaire(Proprietaire unProprietaire) {
 		Modele.insertProprietaire(unProprietaire);
@@ -53,9 +51,7 @@ public class Controleur {
 	public static void updateProprietaire(Proprietaire unProprietaire) {
 		Modele.updateProprietaire(unProprietaire);
 	}
-	
-	
-	
+
 	
 	//habitations
 	public static int insertHabitation(Habitation uneHabitation) {
@@ -110,7 +106,7 @@ public class Controleur {
 		Modele.updateMaison(uneMaison);
 	}
 	
-	//maisons
+	//appartement
 	public static int insertAppartement(Appartement unAppartement) {
 		return Modele.insertAppartement(unAppartement);
 	}
@@ -126,9 +122,6 @@ public class Controleur {
 	public static void updateAppartement (Appartement unAppartement){
 		Modele.updateAppartement(unAppartement);
 	}
-	
-	
-	
 	
 	/********** Autres méthodes **********/
 	public static int selectCountUtilisateur(String role) {

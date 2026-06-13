@@ -97,13 +97,13 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		this.panelForm.add(this.txtTarifHaut);
 		this.panelForm.add(new JLabel("Surface : "));
 		this.panelForm.add(this.txtSurface);
-		this.panelForm.add(new JLabel("ID proprietaire : "));
+		this.panelForm.add(new JLabel("ID propriétaire : "));
 		this.panelForm.add(txtIdProprietaire);
 		this.panelForm.add(new JLabel("Description : "));
 		this.panelForm.add(this.txtDescription);
 		this.panelForm.add(new JLabel("Titre : "));
 		this.panelForm.add(this.txtTitre);
-		this.panelForm.add(new JLabel("Capacite : "));
+		this.panelForm.add(new JLabel("Capacité : "));
 		this.panelForm.add(this.txtCapacite);
 		this.panelForm.add(new JLabel("Caratéristiques : "));
 		this.panelForm.add(this.txtCarac);
@@ -305,13 +305,13 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 					JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 				}else {
 					//instanciation nv Proprio
-					Maison uneMaison = new Maison(refHab,"maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,
+					Maison uneMaison = new Maison(refHab,"Maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,
 																description,titre,capacite,carac);
 					//appel de la methode du controleur pour insérer habitation
 					Controleur.updateMaison(uneMaison);
 					JOptionPane.showMessageDialog(this,"Modification réussie de la maison");
 					//actualiser l'affichage
-					Object ligne [] = {uneMaison.getRef_hab(),"maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac};
+					Object ligne [] = {uneMaison.getRef_hab(),"Maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac};
 					this.unTableau.ajoutLigne(ligne);
 					//vider les champs
 					this.viderChamps();
@@ -360,12 +360,12 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv maison
-			Maison uneMaison = new Maison("maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac);
+			Maison uneMaison = new Maison("Maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac);
 			//appel de la methode du controleur pour insérer maison
 			int idGenere = Controleur.insertMaison(uneMaison);
 			JOptionPane.showMessageDialog(this,"Insertion réussie de la maison");
 			//actualiser l'affichage
-			Object ligne [] = {uneMaison.getRef_hab(),"maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac};
+			Object ligne [] = {uneMaison.getRef_hab(),"Maison",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,carac};
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();

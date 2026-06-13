@@ -139,7 +139,6 @@ create table image(
     foreign key (ref_hab) references habitation(ref_hab)
 );
 
-
 create table station(
     num_sta int(5) not null auto_increment,
     nom_sta varchar(50) not null,
@@ -190,7 +189,8 @@ before insert on maison for each row BEGIN
    set new.ref_hab = ifnull((select ref_hab from habitation where ref_hab >= all
     (select ref_hab from habitation)), 0) +1 ;
 end if;
-insert into habitation values(new.ref_hab,new.type_hab,new.adr_hab,new.cp_hab,new.ville_hab,new.tarif_hab_bas,new.tarif_hab_moy,new.tarif_hab_hau,new.surface,new.id_p,new.description_hab,new.titre_hab,new.capacite_hab);
+insert into habitation values(new.ref_hab,new.type_hab,new.adr_hab,new.cp_hab,new.ville_hab,new.tarif_hab_bas,new.tarif_hab_moy,new.tarif_hab_hau,
+							  new.surface,new.id_p,new.description_hab,new.titre_hab,new.capacite_hab);
 end //
 delimiter ;
 
@@ -203,7 +203,8 @@ before insert on appartement for each row BEGIN
    set new.ref_hab = ifnull((select ref_hab from habitation where ref_hab >= all
     (select ref_hab from habitation)), 0) +1 ;
 end if;
-insert into habitation values(new.ref_hab,new.type_hab,new.adr_hab,new.cp_hab,new.ville_hab,new.tarif_hab_bas,new.tarif_hab_moy,new.tarif_hab_hau,new.surface,new.id_p,new.description_hab,new.titre_hab,new.capacite_hab);
+insert into habitation values(new.ref_hab,new.type_hab,new.adr_hab,new.cp_hab,new.ville_hab,new.tarif_hab_bas,new.tarif_hab_moy,new.tarif_hab_hau,
+							  new.surface,new.id_p,new.description_hab,new.titre_hab,new.capacite_hab);
 end //
 delimiter ;
 
@@ -211,7 +212,10 @@ drop trigger if exists update_maison;
 delimiter //
 create trigger update_maison
 before update on maison for each row BEGIN
-    update habitation set ref_hab=new.ref_hab,type_hab=new.type_hab,adr_hab=new.adr_hab,cp_hab=new.cp_hab,ville_hab=new.ville_hab,tarif_hab_bas=new.tarif_hab_bas,tarif_hab_moy=new.tarif_hab_moy,tarif_hab_hau=new.tarif_hab_hau,surface=new.surface,id_p=new.id_p,description_hab=new.description_hab,titre_hab=new.titre_hab,capacite_hab=new.capacite_hab where habitation.ref_hab=new.ref_hab;
+    update habitation set ref_hab=new.ref_hab,type_hab=new.type_hab,adr_hab=new.adr_hab,cp_hab=new.cp_hab,ville_hab=new.ville_hab,
+    					  tarif_hab_bas=new.tarif_hab_bas,tarif_hab_moy=new.tarif_hab_moy,tarif_hab_hau=new.tarif_hab_hau,surface=new.surface,
+    					  id_p=new.id_p,description_hab=new.description_hab,titre_hab=new.titre_hab,capacite_hab=new.capacite_hab 
+    where habitation.ref_hab=new.ref_hab;
 end //
 delimiter ;
 
@@ -219,7 +223,10 @@ drop trigger if exists update_appart;
 delimiter //
 create trigger update_appart
 before update on appartement for each row BEGIN
-    update habitation set ref_hab=new.ref_hab,type_hab=new.type_hab,adr_hab=new.adr_hab,cp_hab=new.cp_hab,ville_hab=new.ville_hab,tarif_hab_bas=new.tarif_hab_bas,tarif_hab_moy=new.tarif_hab_moy,tarif_hab_hau=new.tarif_hab_hau,surface=new.surface,id_p=new.id_p,description_hab=new.description_hab,titre_hab=new.titre_hab,capacite_hab=new.capacite_hab where habitation.ref_hab=new.ref_hab;
+    update habitation set ref_hab=new.ref_hab,type_hab=new.type_hab,adr_hab=new.adr_hab,cp_hab=new.cp_hab,ville_hab=new.ville_hab,
+    					  tarif_hab_bas=new.tarif_hab_bas,tarif_hab_moy=new.tarif_hab_moy,tarif_hab_hau=new.tarif_hab_hau,surface=new.surface,
+    					  id_p=new.id_p,description_hab=new.description_hab,titre_hab=new.titre_hab,capacite_hab=new.capacite_hab 
+    where habitation.ref_hab=new.ref_hab;
 end //
 delimiter ;
 

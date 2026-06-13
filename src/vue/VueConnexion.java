@@ -26,8 +26,8 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 	private JPanel panelIcon = new JPanel();
 	private JButton btAnnuler = new JButton("Annuler");
 	private JButton btValider = new JButton("Connexion");
-	private JTextField txtEmail = new JTextField();
-	private JPasswordField txtMdp = new JPasswordField();
+	private JTextField txtEmail = new JTextField("oj@gmail.com");
+	private JPasswordField txtMdp = new JPasswordField("admin");
 	private JLabel Email = new JLabel("Email");
 	private JLabel Mdp = new JLabel("Mdp");
 	
@@ -110,8 +110,7 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 				this.txtEmail.setText("");
 				this.txtMdp.setText("");
 			}else {
-				JOptionPane.showMessageDialog(this, "Bienvenue, "+ unAdmin.getNom()+" "+unAdmin.getPrenom()
-				+" \n votre rôle est "+ unAdmin.getRole());
+				JOptionPane.showMessageDialog(this, "Bienvenue, "+ unAdmin.getNom()+" "+unAdmin.getPrenom());
 				
 				
 				//Ouvrir la vue général du logiciel

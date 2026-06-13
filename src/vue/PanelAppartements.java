@@ -100,15 +100,15 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 		this.panelForm.add(this.txtTarifHaut);
 		this.panelForm.add(new JLabel("Surface : "));
 		this.panelForm.add(this.txtSurface);
-		this.panelForm.add(new JLabel("ID proprietaire : "));
+		this.panelForm.add(new JLabel("ID propriétaire : "));
 		this.panelForm.add(txtIdProprietaire);
 		this.panelForm.add(new JLabel("Description : "));
 		this.panelForm.add(this.txtDescription);
 		this.panelForm.add(new JLabel("Titre : "));
 		this.panelForm.add(this.txtTitre);
-		this.panelForm.add(new JLabel("Capacite : "));
+		this.panelForm.add(new JLabel("Capacité : "));
 		this.panelForm.add(this.txtCapacite);
-		this.panelForm.add(new JLabel("N°Etage : "));
+		this.panelForm.add(new JLabel("Etage : "));
 		this.panelForm.add(this.txtEtage);
 		this.panelForm.add(new JLabel("Type d'appartement : "));
 		this.panelForm.add(this.txtTypeap);
@@ -303,8 +303,8 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 		int idProprietaire = Integer.parseInt(tab[0]);
 		String description = this.txtDescription.getText();
 		String titre = this.txtTitre.getText();
-		int capacite = Integer.parseInt(this.tableHabitations.getValueAt(numLigne, 12).toString());
-		int etage = Integer.parseInt(this.tableHabitations.getValueAt(numLigne, 13).toString());
+		int capacite = Integer.parseInt(this.txtCapacite.getText());
+		int etage = Integer.parseInt(this.txtEtage.getText());
 		String typeap = this.txtTypeap.getText();
 		
 		
@@ -313,14 +313,14 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 					JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 				}else {
 					//instanciation nv Proprio
-					Appartement unAppartement = new Appartement(refHab,"appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,
+					Appartement unAppartement = new Appartement(refHab,"Appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,
 																description,titre,capacite,etage,typeap);
 					//appel de la methode du controleur pour insérer habitation
 					Controleur.updateAppartement(unAppartement);
 					JOptionPane.showMessageDialog(this,"Modification réussie de l'appartement");
 					//actualiser l'affichage
-					Object ligne [] = {unAppartement.getRef_hab(),"appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,etage,typeap};
-					this.unTableau.ajoutLigne(ligne);
+					Object ligne [] = {unAppartement.getRef_hab(),"Appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,etage,typeap};
+					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					//vider les champs
 					this.viderChamps();
 					this.btSupprimer.setEnabled(false);
@@ -370,12 +370,12 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv Proprio
-			Appartement unAppartement = new Appartement("appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,etage,typeap);
+			Appartement unAppartement = new Appartement("Appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,etage,typeap);
 			//appel de la methode du controleur pour insérer habitation
 			int idGenere = Controleur.insertAppartement(unAppartement);
 			JOptionPane.showMessageDialog(this,"Insertion réussie de l'appartement");
 			//actualiser l'affichage
-			Object ligne [] = {unAppartement.getRef_hab(),"appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,etage,typeap};
+			Object ligne [] = {unAppartement.getRef_hab(),"Appartement",adresse,cp,ville,tarifBas,tarifMoy,tarifHaut,surface,idProprietaire,description,titre,capacite,etage,typeap};
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();

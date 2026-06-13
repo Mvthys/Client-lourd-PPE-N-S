@@ -75,22 +75,20 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		this.panelForm.setBounds(10,100,350,400);
 		this.panelForm.setBackground(new Color(242,242,242));
 		this.panelForm.setLayout(null);
-		this.panelForm.setLayout(new GridLayout(9,2, 5, 5));
+		this.panelForm.setLayout(new GridLayout(8,2, 5, 5));
 		
-		this.panelForm.add(new JLabel("Date réservation : "));
-		this.panelForm.add(this.txtDateRes);
-		this.panelForm.add(new JLabel("Nombre personnes : "));
-		this.panelForm.add(this.txtNbPerso);
-		this.panelForm.add(new JLabel("Début : "));
-		this.panelForm.add(this.txtDateDebut);
-		this.panelForm.add(new JLabel("Fin : "));
-		this.panelForm.add(this.txtDateFin);
-		this.panelForm.add(new JLabel("Etat : "));
-		this.panelForm.add(this.txtEtatRes);
 		this.panelForm.add(new JLabel("ID client : "));
 		this.panelForm.add(this.txtIdC);
 		this.panelForm.add(new JLabel("Réf habitation : "));
 		this.panelForm.add(txtRefHab);
+		this.panelForm.add(new JLabel("Nombre personnes : "));
+		this.panelForm.add(this.txtNbPerso);
+		this.panelForm.add(new JLabel("Début séjour : "));
+		this.panelForm.add(this.txtDateDebut);
+		this.panelForm.add(new JLabel("Fin séjour : "));
+		this.panelForm.add(this.txtDateFin);
+		this.panelForm.add(new JLabel("Etat : "));
+		this.panelForm.add(this.txtEtatRes);
 		
 		this.panelForm.add(this.btnAnnuler);
 		this.panelForm.add(this.btnValider);
@@ -271,7 +269,6 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 	public void updateReservation(){
 		int numLigne = this.tableReservations.getSelectedRow();
 		int refRes = Integer.parseInt(this.tableReservations.getValueAt(numLigne,0).toString());
-		String dateRes = this.txtDateRes.getText();
 		int nbPerso = Integer.parseInt(this.txtNbPerso.getText());
 		String dateDebut = this.txtDateDebut.getText();
 		String dateFin = this.txtDateFin.getText();
@@ -283,18 +280,17 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		String tabH[] = chaineH.split("-");
 		int refHab = Integer.parseInt(tabH[0]);
 		
-		if(dateRes.equals("") || this.txtNbPerso.getText().isEmpty() || dateDebut.equals("") || dateFin.equals("") || 
+		if(this.txtNbPerso.getText().isEmpty() || dateDebut.equals("") || dateFin.equals("") || 
 				   etatRes.equals("") || txtIdC.equals("Sélectionner") || txtRefHab.getSelectedItem().toString().isEmpty()) {
 					JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 				}else {
 					//instanciation nv Resa
-					Reservation uneReservation = new Reservation(refRes,dateRes,nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
+					Reservation uneReservation = new Reservation(refRes,"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
 					//appel de la methode du controleur pour insérer habitation
 					Controleur.updateReservation(uneReservation);
 					JOptionPane.showMessageDialog(this,"Modification réussie de la réservation");
 					//actualiser l'affichage
-					Object ligne [] = {uneReservation.getRef_hab(),dateRes,nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
-					this.unTableau.ajoutLigne(ligne);
+					Object ligne [] = {uneReservation.getRef_hab(),"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
 					//vider les champs
 					this.viderChamps();
 					this.btModifier.setEnabled(false);
@@ -303,9 +299,7 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 					this.unTableau.setDonnes(this.obtenirDonnees(""));
 					this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
 				}
-		
-		
-	}
+		}
 	
 	
 	public void viderChamps() {
@@ -318,7 +312,6 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 	}
 	
 	public void insertReservation() {
-		String dateRes = this.txtDateRes.getText();
 		int nbPerso = Integer.parseInt(this.txtNbPerso.getText());
 		String dateDebut = this.txtDateDebut.getText();
 		String dateFin = this.txtDateFin.getText();
@@ -331,17 +324,17 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		int refHab = Integer.parseInt(tabH[0]);
 
 		
-		if(dateRes.equals("") || this.txtNbPerso.getText().isEmpty() || dateDebut.equals("") || dateFin.equals("") || 
+		if(this.txtNbPerso.getText().isEmpty() || dateDebut.equals("") || dateFin.equals("") || 
 		   etatRes.equals("") || this.txtIdC.equals("Sélectionner") || txtRefHab.getSelectedItem().toString().isEmpty()) {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}else {
 			//instanciation nv Resa
-			Reservation uneReservation = new Reservation(dateRes,nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
+			Reservation uneReservation = new Reservation("",nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
 			//appel de la methode du controleur pour insérer habitation
 			int idGenere = Controleur.insertReservation(uneReservation);
 			JOptionPane.showMessageDialog(this,"Insertion réussie de la réservation");
 			//actualiser l'affichage
-			Object ligne [] = {uneReservation.getRef_res(),dateRes,nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
+			Object ligne [] = {uneReservation.getRef_res(),"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
 			this.unTableau.ajoutLigne(ligne);
 			//vider les champs
 			this.viderChamps();

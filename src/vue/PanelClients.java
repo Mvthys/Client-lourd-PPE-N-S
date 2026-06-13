@@ -72,9 +72,9 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		
 		this.panelForm.add(new JLabel("Nom : "));
 		this.panelForm.add(this.txtNom);
-		this.panelForm.add(new JLabel("Prenom : "));
+		this.panelForm.add(new JLabel("Prénom : "));
 		this.panelForm.add(this.txtPrenom);
-		this.panelForm.add(new JLabel("Email : "));
+		this.panelForm.add(new JLabel("E-mail : "));
 		this.panelForm.add(this.txtEmail);
 		this.panelForm.add(new JLabel("Mdp : "));
 		this.panelForm.add(this.txtMdp);
@@ -84,7 +84,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		this.panelForm.add(this.txtCp);
 		this.panelForm.add(new JLabel("Ville : "));
 		this.panelForm.add(this.txtVille);
-		this.panelForm.add(new JLabel("Tel : "));
+		this.panelForm.add(new JLabel("Tél : "));
 		this.panelForm.add(this.txtTel);
 		this.panelForm.add(new JLabel("RIB : "));
 		this.panelForm.add(this.txtRIB);

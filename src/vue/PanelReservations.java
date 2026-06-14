@@ -77,7 +77,7 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		this.panelForm.setLayout(null);
 		this.panelForm.setLayout(new GridLayout(8,2, 5, 5));
 		
-		this.panelForm.add(new JLabel("ID client : "));
+		this.panelForm.add(new JLabel("Client : "));
 		this.panelForm.add(this.txtIdC);
 		this.panelForm.add(new JLabel("Réf habitation : "));
 		this.panelForm.add(txtRefHab);

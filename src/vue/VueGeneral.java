@@ -28,7 +28,7 @@ public class VueGeneral extends JFrame implements ActionListener, KeyListener{
 	private static PanelProprietaires unPanelProprietaires = new PanelProprietaires("Gestion des propriétaires");
 	private static PanelHabitations unPanelHabitations = new PanelHabitations("Gestion des habitations");
 	private static PanelReservations unPanelReservations = new PanelReservations("Gestion des réservations");
-	private static PanelStats unPanelStats = new PanelStats("Gestion des statistiques");
+	private static PanelStats unPanelStats = new PanelStats("Statistiques globales");
 	
 	
 	

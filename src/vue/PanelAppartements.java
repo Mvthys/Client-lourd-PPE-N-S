@@ -100,7 +100,7 @@ public class PanelAppartements extends PanelPrincipal implements ActionListener 
 		this.panelForm.add(this.txtTarifHaut);
 		this.panelForm.add(new JLabel("Surface : "));
 		this.panelForm.add(this.txtSurface);
-		this.panelForm.add(new JLabel("ID propriétaire : "));
+		this.panelForm.add(new JLabel("Propriétaire : "));
 		this.panelForm.add(txtIdProprietaire);
 		this.panelForm.add(new JLabel("Description : "));
 		this.panelForm.add(this.txtDescription);

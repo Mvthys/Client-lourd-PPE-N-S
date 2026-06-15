@@ -1,5 +1,6 @@
 package modele;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,43 +20,36 @@ import controleur.Appartement;
 
 public class Modele {
 	
-	private static Bdd uneBdd = new Bdd("localhost","neigeetsoleil","root","");
-	
-	
-
-	
-
-	
-	
-	
+	private static Bdd uneBdd = new Bdd("localhost","neigeetsoleil","root","");	
 	
 /***************************************************************     UTILISATEURS     ***************************************************************/
 
-public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
-	Utilisateur unUtilisateur = null;
-	String requete = "select * from utilisateur where email ='"+ email +"' and mdp ='"+ mdp +"';";
-		
-	try {
-		uneBdd.seConnecter();
-		//comme le prepare en php
-		Statement unStat = uneBdd.getMaConnexion().createStatement();
-		//comme execute en phph
-		ResultSet unResultat = unStat.executeQuery(requete);
-		//comme le fetch
-		if(unResultat.next()) {
-			unUtilisateur = new Utilisateur(
-									unResultat.getInt("Id_user"),
-									unResultat.getString("nom"),
-									unResultat.getString("prenom"),
-									unResultat.getString("email"),
-									unResultat.getString("mdp"),
-									unResultat.getString("tel"),
-									unResultat.getString("role")
-								); 
+	// --- SELECT WHERE --- //
+	public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
+		Utilisateur unUtilisateur = null;
+		String requete = "select * from utilisateur where email ='"+ email +"' and mdp ='"+ mdp +"';";
+		try {
+			uneBdd.seConnecter();
+			//comme le prepare en php
+			Statement unStat = uneBdd.getMaConnexion().createStatement();
+			//comme execute en phph
+			ResultSet unResultat = unStat.executeQuery(requete);
+			//comme le fetch
+			if(unResultat.next()) {
+				unUtilisateur = new Utilisateur(
+						unResultat.getInt("Id_user"),
+						unResultat.getString("nom"),
+						unResultat.getString("prenom"),
+						unResultat.getString("email"),
+						unResultat.getString("mdp"),
+						unResultat.getString("tel"),
+						unResultat.getString("role")
+				); 
 			}
 			uneBdd.seDeconnecter();
 		}catch(SQLException e) {
 			System.out.println("erreur requete : " + requete);
+			e.printStackTrace();
 		}
 		return unUtilisateur;
 	}
@@ -69,11 +63,11 @@ public static Utilisateur selectWhereUtilisateur(String email, String mdp) {
 
 
 /***************************************************************     ADMIN     ***************************************************************/
-
-public static Utilisateur selectWhereAdmin(String email, String mdp) {
+	
+	// --- SELECT WHERE --- //
+	public static Utilisateur selectWhereAdmin(String email, String mdp) {
 		Utilisateur unAdmin = null;
 		String requete = "select * from utilisateur where email ='"+ email +"' and mdp ='"+ mdp +"' and role = 'admin';";
-		
 		try {
 			uneBdd.seConnecter();
 			//comme le prepare en php
@@ -83,18 +77,19 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			//comme le fetch
 			if(unResultat.next()) {
 				unAdmin = new Utilisateur(
-									unResultat.getInt("Id_user"),
-									unResultat.getString("nom"),
-									unResultat.getString("prenom"),
-									unResultat.getString("email"),
-									unResultat.getString("mdp"),
-									unResultat.getString("tel"),
-									unResultat.getString("role")
-									); 
+						unResultat.getInt("Id_user"),
+						unResultat.getString("nom"),
+						unResultat.getString("prenom"),
+						unResultat.getString("email"),
+						unResultat.getString("mdp"),
+						unResultat.getString("tel"),
+						unResultat.getString("role")
+				); 
 			}
 			uneBdd.seDeconnecter();
 		}catch(SQLException e) {
 			System.out.println("erreur requete : " + requete);
+			e.printStackTrace();
 		}
 		return unAdmin;
 	}
@@ -148,6 +143,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	        }
 
 	        uneBdd.seDeconnecter();
+	        System.out.println("Ajout réussie du client : " + lastId);
 	        
 	    } catch (SQLException e) {
 	        System.out.println("Erreur SQL lors de l'insertion : " + e.getMessage());
@@ -183,8 +179,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	        psClient.close();
 	        
 	        uneBdd.seDeconnecter();
-	        
-	        System.out.println("Mise à jour réussie pour l'ID : " + unClient.getId_user());
+	        System.out.println("Mise à jour réussie pour le client : " + unClient.getId_user());
 
 	    } catch (SQLException e) {
 	        System.out.println("Erreur SQL lors de l'update : " + e.getMessage());
@@ -321,7 +316,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 				
 				psProprio.executeUpdate();
 				psProprio.close();
-				System.out.println("Insertion réussie en BDD pour l'ID : " + lastId);
+				System.out.println("Ajout réussie du propriétaire : " + lastId);
 			}
 			
 			uneBdd.seDeconnecter();
@@ -361,7 +356,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	    	
 	    	uneBdd.seDeconnecter();
 	    	
-	    	System.out.println("Mise à jour réussie pour l'ID : " + unProprietaire.getId_user());
+	    	System.out.println("Mise à jour réussie du propriétaire : " + unProprietaire.getId_user());
 	    	
 	    }catch(SQLException e) {
 	    	System.out.println("Erreur requête : " + e.getMessage());
@@ -409,7 +404,8 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			}
 			
 		}catch(SQLException e) {
-		System.out.println("requete incorrect : " + requete);
+			System.out.println("requete incorrect : " + requete);
+			e.printStackTrace();
 		}
 		return lesProprietaires;
 	}
@@ -496,9 +492,11 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 
 	        pst.close();
 	        uneBdd.seDeconnecter();
+	        System.out.println("Ajout réussie de l'habitation : " + idGenere);
 
 	    } catch (SQLException e) {
 	        System.out.println("Erreur INSERT : " + e.getMessage());
+	        e.printStackTrace();
 	    }
 
 	    return idGenere;
@@ -530,7 +528,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			psHab.close();
 			uneBdd.seDeconnecter();
 			
-			System.out.println("Mise à jour réussie pour l'ID : " + uneHabitation.getRef_hab());
+			System.out.println("Mise à jour réussie pour l'habitation : " + uneHabitation.getRef_hab());
 			
 		}catch(SQLException e) {
 			System.out.println("Erreur SQL : " + e.getMessage());
@@ -571,7 +569,8 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			}
 			
 		}catch(SQLException e) {
-		System.out.println("Erreur SELECT * : "+ e.getMessage());
+			System.out.println("Erreur SELECT * : "+ e.getMessage());
+			e.printStackTrace();
 		}
 		return lesHabitations;
 	}
@@ -611,6 +610,32 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	    return uneHabitation;
 	}
 	
+	// ---  SELECT CAPACITE HABITATION --- //
+	public static int selectCapaciteHab(int ref_hab) {
+		String requete = "SELECT capacite_hab FROM habitation WHERE ref_hab = ?";
+		int capacite = 0;
+		
+		try {
+			uneBdd.seConnecter();
+			PreparedStatement pst = uneBdd.getMaConnexion().prepareStatement(requete);
+			pst.setInt(1, ref_hab);
+			
+			ResultSet rs = pst.executeQuery();
+			
+			if(rs.next()) {
+				capacite = rs.getInt("capacite_hab");
+			}
+			
+			rs.close();
+			pst.close();
+			uneBdd.seDeconnecter();
+			
+		}catch(SQLException e) {
+			System.out.println("Erreur SQL : " + e.getMessage());
+			e.printStackTrace();
+		}
+		return capacite;
+	}
 	
 	
 	
@@ -658,9 +683,11 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 
 	        pst.close();
 	        uneBdd.seDeconnecter();
+	        System.out.println("Ajout réussie de la maison : " + idGenere);
 
 	    } catch (SQLException e) {
 	        System.out.println("Erreur INSERT : " + e.getMessage());
+	        e.printStackTrace();
 	    }
 	    
 	    return idGenere;
@@ -692,10 +719,9 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			pst.executeUpdate();
 			pst.close();
 			uneBdd.seDeconnecter();
+			System.out.println("Mise à jour réussie pour la maison : " + uneMaison.getRef_hab());
 			
-			System.out.println("Mise à jour réussie pour l'ID : " + uneMaison.getRef_hab());
-			
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			System.out.println("Erreur SQL : " + e.getMessage());
 			e.printStackTrace();
 		}	
@@ -703,8 +729,38 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	
 	// ---  DELETE --- //
 	public static void deleteMaison(int ref_hab) {
-		String requete = "DELETE FROM maison WHERE ref_hab ='"+ref_hab+"';";
-		executerRequete(requete);
+		String reqU = "UPDATE contrat SET status_c = 'Annule' WHERE ref_hab = ?";
+		String reqD1 = "DELETE FROM contrat WHERE ref_hab = ?";
+		String reqD2 = "DELETE FROM maison WHERE ref_hab = ?";
+		
+		try {
+			uneBdd.seConnecter();
+			
+			//update contrat
+			PreparedStatement pstU = uneBdd.getMaConnexion().prepareStatement(reqU);
+			pstU.setInt(1, ref_hab);
+			pstU.executeUpdate();
+			pstU.close();
+			
+			//delete contrat
+			PreparedStatement pstD1 = uneBdd.getMaConnexion().prepareStatement(reqD1);
+			pstD1.setInt(1, ref_hab);
+			pstD1.executeUpdate();
+			pstD1.close();
+			
+			//delete maison
+			PreparedStatement pstD2 = uneBdd.getMaConnexion().prepareStatement(reqD2);
+			pstD2.setInt(1, ref_hab);
+			pstD2.executeUpdate();
+			pstD2.close();
+			
+			uneBdd.seDeconnecter();
+			System.out.println("Suppression réussie pour la maison : " + ref_hab);
+			
+		}catch(SQLException e) {
+			System.out.println("Erreur SQL : " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	// ---  SELECT ALL --- //
@@ -827,9 +883,11 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 
 	        pst.close();
 	        uneBdd.seDeconnecter();
+	        System.out.println("Insertion réussie pour l'appartement : " + idGenere);
 
 	    } catch (SQLException e) {
 	        System.out.println("Erreur INSERT : " + e.getMessage());
+	        e.printStackTrace();
 	    }
 	    
 	    return idGenere;
@@ -861,9 +919,8 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			
 			pst.executeUpdate();
 			pst.close();
-			uneBdd.seDeconnecter();
-			
-			System.out.println("Mise à jour réussie pour l'ID : " + unAppartement.getRef_hab());
+			uneBdd.seDeconnecter();			
+			System.out.println("Mise à jour réussie pour l'appartement : " + unAppartement.getRef_hab());
 			
 		}catch(SQLException e) {
 			System.out.println("Erreur SQL : " + e.getMessage());
@@ -873,8 +930,38 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	
 	// ---  DELETE --- //
 	public static void deleteAppartement(int ref_hab) {
-		String requete = "DELETE FROM appartement WHERE ref_hab ='"+ref_hab+"';";
-		executerRequete(requete);
+		String reqU = "UPDATE contrat SET status_c = 'Annule' WHERE ref_hab = ?";
+		String reqD1 = "DELETE FROM contrat WHERE ref_hab = ?";
+		String reqD2 = "DELETE FROM appartement WHERE ref_hab = ? ";
+		
+		try {
+			uneBdd.seConnecter();
+			
+			//update
+			PreparedStatement pstU = uneBdd.getMaConnexion().prepareStatement(reqU);
+			pstU.setInt(1, ref_hab);
+			pstU.executeUpdate();
+			pstU.close();
+			
+			//delete contrat
+			PreparedStatement pstD1 = uneBdd.getMaConnexion().prepareStatement(reqD1);
+			pstD1.setInt(1, ref_hab);
+			pstD1.executeUpdate();
+			pstD1.close();
+			
+			//delete appart
+			PreparedStatement pstD2 = uneBdd.getMaConnexion().prepareStatement(reqD2);
+			pstD2.setInt(1, ref_hab);
+			pstD2.executeUpdate();
+			pstD2.close();
+			
+			uneBdd.seDeconnecter();
+			System.out.println("Suppression réussie pour l'appartement : " + ref_hab);
+			
+		}catch(SQLException e) {
+			System.out.println("Erreur SQL : " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	// ---  SELECT ALL --- //
@@ -946,6 +1033,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 
 	    return unAppartement;
 	}
+
 	
 	
 	
@@ -955,7 +1043,74 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	
 	
 	
-	/***************************************************************     APPARTEMENTS     ***************************************************************/
+/***************************************************************     PHOTOS     ***************************************************************/	
+	
+	public static void insertPhotos(int ref_hab, String url_photo, int is_principal) {
+	    String requete = "INSERT INTO photos (ref_hab, url_photo, is_principal) VALUES (?, ?, ?)";
+	    try {
+	        uneBdd.seConnecter();
+	        
+	        PreparedStatement pst = uneBdd.getMaConnexion().prepareStatement(requete);
+	        pst.setInt(1, ref_hab);
+	        pst.setString(2, url_photo);
+	        pst.setInt(3, is_principal);
+	        pst.executeUpdate(); 
+	        pst.close();
+	        
+	        uneBdd.seDeconnecter();
+	        System.out.println("Ajout des photos réussi pour l'habitation : " + ref_hab);
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Erreur SQL lors de l'insertion de l'image : " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+	
+	public static void deletePhotos(int ref_hab) {
+		String reqDelete = "DELETE FROM photos WHERE ref_hab = ?";
+		String reqSelect = "SELECT url_photo FROM photos WHERE ref_hab = ?";
+		String dossier = "C:/wamp64/www/PPE-BTS-SIO/Neige et Soleil/images/habitations/";
+		
+		try {
+			uneBdd.seConnecter();
+			
+			//supp du dossier
+			PreparedStatement pstS = uneBdd.getMaConnexion().prepareStatement(reqSelect);
+			pstS.setInt(1, ref_hab);
+			ResultSet rs = pstS.executeQuery();
+			if(rs.next()) {
+				String nomFichier = rs.getString("url_photo");
+				File fichierSupp = new File(dossier+nomFichier);
+				if(fichierSupp.exists()) {
+					fichierSupp.delete();
+				}
+			}
+			rs.close();
+			pstS.close();
+			
+			//supp de la bdd
+			PreparedStatement pstD = uneBdd.getMaConnexion().prepareStatement(reqDelete);
+			pstD.setInt(1, ref_hab);
+			pstD.executeUpdate();
+			pstD.close();
+			uneBdd.seDeconnecter();
+			System.out.println("Suppressions photos réussie pour la réf : " + ref_hab);
+			
+		}catch(SQLException e) {
+			System.out.println("Erreur SQL : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+/***************************************************************     RESERVATIONS     ***************************************************************/
 	
 	// ---  INSERT --- //
 	public static int insertReservation(Reservation uneReservation) {
@@ -987,6 +1142,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 
 	        pst.close();
 	        uneBdd.seDeconnecter();
+	        System.out.println("Ajoute réussie pour la réservation : " + idGenere);
 
 	    } catch (SQLException e) {
 	        System.out.println("Erreur INSERT : " + e.getMessage());
@@ -1018,7 +1174,7 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 			pst.close();
 			uneBdd.seDeconnecter();
 			
-			System.out.println("Mise à jour réussie pour l'ID : " + uneReservation.getRef_hab());
+			System.out.println("Mise à jour réussie pour la réservation : " + uneReservation.getRef_hab());
 			
 		}catch(SQLException e) {
 			System.err.println("Erreur SQl : " + e.getMessage());
@@ -1091,6 +1247,34 @@ public static Utilisateur selectWhereAdmin(String email, String mdp) {
 	    }
 
 	    return uneReservation;
+	}
+	
+	// ---  ANNULER RESERVATION --- //
+	public static void annulerReservation(int ref_res) {
+		String reqUpdate = "UPDATE reservation SET etat_res = 'Annulee' WHERE ref_res = ?";
+		String reqDelete = "DELETE FROM reservation WHERE ref_res = ?";
+		try {
+		uneBdd.seConnecter();
+		
+		//update
+		PreparedStatement pstU = uneBdd.getMaConnexion().prepareStatement(reqUpdate);
+		pstU.setInt(1, ref_res);
+		pstU.executeUpdate();
+		pstU.close();
+		
+		//delete
+		PreparedStatement pstD = uneBdd.getMaConnexion().prepareStatement(reqDelete);
+		pstD.setInt(1, ref_res);
+		pstD.executeUpdate();
+		pstD.close();
+		
+		uneBdd.seDeconnecter();
+		System.out.println("Réussite annulation réservation : " + ref_res);
+		
+		}catch(SQLException e) {
+			System.out.println("Erreur SQl : " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	

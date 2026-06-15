@@ -30,6 +30,7 @@ public class Reservation {
 	}
 	
 	
+	
 	public int getRef_res() {
 		return ref_res;
 	}

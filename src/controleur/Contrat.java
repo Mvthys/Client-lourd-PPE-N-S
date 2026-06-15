@@ -75,5 +75,4 @@ public class Contrat {
 		this.annee_fin = annee_fin;
 	}
 	
-
 }

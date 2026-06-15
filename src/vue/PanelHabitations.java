@@ -17,32 +17,37 @@ import controleur.Habitation;
 
 public class PanelHabitations extends PanelPrincipal implements ActionListener {
 	
+	//création élements panel
 	private JPanel panelForm = new JPanel();
-	
 	private JButton btMaisons = new JButton("Maisons");
 	private JButton btAppartements = new JButton("Appartements");
 	private JLabel lbNbHabitations = new JLabel("");
 	private List<Habitation> allHabitations = new ArrayList<>();
-	
+	//Panel maison
 	private static PanelMaisons unPanelMaisons = new PanelMaisons("");
+	//Panel appart
 	private static PanelAppartements unPanelAppartements = new PanelAppartements("");
 
+	
+	
 	public PanelHabitations(String titre) {
 		super(titre);
-		
+		//Placement panel
 		this.panelForm.setBounds(250,60,400,40);
 		this.panelForm.setBackground(new Color(168,214,116));
 		this.panelForm.setLayout(new GridLayout(1,2));
 		
-		//rendre btn ecoutables
+		//Rendre btn ecoutables
 		this.btMaisons.addActionListener(this);
 		this.btAppartements.addActionListener(this);
 		
+		//Ajout btns
 		this.panelForm.add(this.btMaisons);
 		this.panelForm.add(this.btAppartements);
 		
 		this.allHabitations = Controleur.selectAllHabitations("");
 		
+		//nb total hab
 		this.lbNbHabitations.setBounds(370,100,300,20);
 		this.lbNbHabitations.setText("Nombre total d'habitations : " + this.allHabitations.size());
 		
@@ -56,6 +61,8 @@ public class PanelHabitations extends PanelPrincipal implements ActionListener {
 		this.add(this.panelForm);
 	}
 	
+	
+	
 	public void afficherPanel (int choix) {
 		unPanelMaisons.setVisible(false);
 		unPanelAppartements.setVisible(false);
@@ -64,6 +71,8 @@ public class PanelHabitations extends PanelPrincipal implements ActionListener {
 			case 2 : unPanelAppartements.setVisible(true);break;
 		}
 	}
+	
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

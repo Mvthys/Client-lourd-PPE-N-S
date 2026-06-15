@@ -23,6 +23,7 @@ import controleur.Tableau;
 
 public class PanelClients extends PanelPrincipal implements ActionListener {
 	
+	//création élemenst panel
 	private JPanel panelForm = new JPanel();
 	private JTextField txtNom = new JTextField();
 	private JTextField txtPrenom = new JTextField();
@@ -38,7 +39,7 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 	private JButton btnAnnuler = new JButton("Annuler");
 	private JButton btnValider = new JButton("Valider");
 	
-	private JTable tableClients;
+	private JTable tableClients;//Jtable
 	private JScrollPane scrollClients;
 	private Tableau unTableau;
 	
@@ -51,25 +52,29 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 	
 	private JLabel lbNbClients = new JLabel();
 	
+	
+	
 	public PanelClients(String titre) {
 		super(titre);
 		// TODO Auto-generated constructor stub
+		//Placement panel filtre
 		this.panelFiltre.setBounds(400,70,500,20);
 		this.panelFiltre.setBackground(new Color(242,242,242));
 		this.panelFiltre.setLayout(new GridLayout(1,3, 5, 5));
 		this.panelFiltre.add(new JLabel("Filtrer par :"));
 		this.panelFiltre.add(this.txtFiltre);
 		this.panelFiltre.add(this.btFiltrer);
-		
 		this.add(this.panelFiltre);
 		
+		//Placement titre insérer/modif client
 		this.lbInsertClient.setBounds(120,70,300,20);
 		this.add(this.lbInsertClient);
 		
+		//Placement panel insert
 		this.panelForm.setBounds(10,100,350,400);
 		this.panelForm.setBackground(new Color(242,242,242));
 		this.panelForm.setLayout(new GridLayout(11,2, 5, 5));
-		
+		//Placement élements
 		this.panelForm.add(new JLabel("Nom : "));
 		this.panelForm.add(this.txtNom);
 		this.panelForm.add(new JLabel("Prénom : "));
@@ -88,24 +93,23 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		this.panelForm.add(this.txtTel);
 		this.panelForm.add(new JLabel("RIB : "));
 		this.panelForm.add(this.txtRIB);
-		
+		//Ajout btn
 		this.panelForm.add(this.btnAnnuler);
 		this.panelForm.add(this.btnValider);
 		this.panelForm.add(this.btSupprimer);
 		this.panelForm.add(this.btModifier);
-		
+		//Placement borders
 		this.panelForm.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 1),
 				BorderFactory.createEmptyBorder(10,10,10,10)
 				));
-		
+		//Desactivation btns
 		this.btSupprimer.setEnabled(false);
 		this.btModifier.setEnabled(false);
-		
+		//AJOUT DU TOUT
 		this.add(this.panelForm);
 		
-		
-		//placement JTable
+		//Placement JTable
 		String nomsColonnes[] = {"ID client","Nom","Prenom","Email","mdp","Adresse","Code postal","Ville","Tel","RIB"};
 		this.unTableau = new Tableau(this.obtenirDonnees(""), nomsColonnes);
 		this.tableClients = new JTable(this.unTableau);
@@ -119,13 +123,17 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		this.lbNbClients.setText("Nombre de clients : "+unTableau.getRowCount());
 		this.add(this.lbNbClients);
 	
-		//rendre btn ecoutables
+		//Rendre btn ecoutables
 		this.btnAnnuler.addActionListener(this);
 		this.btnValider.addActionListener(this);
 		this.btFiltrer.addActionListener(this);
 		this.btSupprimer.addActionListener(this);
 		this.btModifier.addActionListener(this);
 		
+		
+		
+		
+		/*******************************************************     MOUSE LISTENER     *******************************************************/
 		this.tableClients.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -172,8 +180,11 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 			}
 		});
 	}
-
 	
+	
+	
+	
+	/*******************************************************     OBTENIR DONNEES     *******************************************************/
 	public Object [] [] obtenirDonnees (String filtre){
 		ArrayList<Client> lesClients = Controleur.selectAllClients(filtre);
 		Object [] [] matrice = new Object [lesClients.size()][10];
@@ -194,7 +205,10 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		return matrice;
 	}
 	
-
+	
+	
+	
+	/*******************************************************     ACTION EVENT     *******************************************************/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -217,6 +231,26 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 	
 	}
 	
+	
+	
+	
+	/*******************************************************     VIDER CHAMPS     *******************************************************/
+	public void viderChamps() {
+		this.txtNom.setText("");
+		this.txtPrenom.setText("");
+		this.txtEmail.setText("");
+		this.txtMdp.setText("");
+		this.txtAdresse.setText("");
+		this.txtCp.setText("");
+		this.txtVille.setText("");
+		this.txtTel.setText("");
+		this.txtRIB.setText("");
+	}
+	
+	
+	
+	
+	/*******************************************************     DELETE     *******************************************************/
 	public void deleteClient() {
 		int numLigne = tableClients.getSelectedRow();
 		int idClient = Integer.parseInt(unTableau.getValueAt(numLigne,0).toString());
@@ -234,6 +268,10 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		}
 	}
 	
+	
+	
+	
+	/*******************************************************     UPDATE     *******************************************************/
 	public void updateClient() {
 		int numLigne = tableClients.getSelectedRow();
 		int idClient = Integer.parseInt(unTableau.getValueAt(numLigne,0).toString());
@@ -247,10 +285,39 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		String tel = this.txtTel.getText();
 		String RIB = this.txtRIB.getText();
 		
+		//Controle saisie champs
 		if(nom.equals("") || prenom.equals("") || email.equals("") || mdp.equals("") || adresse.equals("") || cp.equals("") || 
 				ville.equals("") || tel.equals("") || RIB.equals("")) {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
-		}else {
+		}else if(!Controleur.regexNomPrenom(nom)) {
+			JOptionPane.showMessageDialog(this, "Format NOM incorrect !");
+			this.txtNom.setText("");
+		}else if(!Controleur.regexNomPrenom(prenom)) {
+			JOptionPane.showMessageDialog(this, "Format PRENOM incorrect !");
+			this.txtPrenom.setText("");
+		}else if(!Controleur.regexEmail(email)) {
+			JOptionPane.showMessageDialog(this, "Format E-MAIL incorrect !");
+			this.txtEmail.setText("");
+		}else if(!Controleur.regexMdp(mdp)) {
+			JOptionPane.showMessageDialog(this, "Format MOT DE PASSE incorrect !");
+			this.txtMdp.setText("");
+		}else if(!Controleur.regexAdresse(adresse)) {
+			JOptionPane.showMessageDialog(this, "Format ADRESSE incorrect !");
+			this.txtAdresse.setText("");
+		}else if(!Controleur.regexCP(cp)) {
+			JOptionPane.showMessageDialog(this, "Format CODE POSTAL incorrect ! \n(ex: 75017 - 5 chiffres)");
+			this.txtCp.setText("");
+		}else if(!Controleur.regexVille(ville)) {
+			JOptionPane.showMessageDialog(this, "Format VILLE incorrect !");
+			this.txtVille.setText("");
+		}else if(!Controleur.regexTel(tel)) {
+			JOptionPane.showMessageDialog(this, "Format TEL incorrect ! \n(ex: 06xxxxxxx - sans espaces ni tirets)");
+			this.txtTel.setText("");
+		}else if(!Controleur.regexRIB(RIB)) {
+			JOptionPane.showMessageDialog(this, "Format RIB incorrect ! \n(27 caractéres commençant par FR)");
+			this.txtRIB.setText("");
+		}
+		else {
 			//instanciation nv client
 			Client unClient = new Client(idClient,nom,prenom,email,mdp,tel,adresse,cp,ville,RIB);
 			//appel de la methode du controleur pour insérer client
@@ -267,18 +334,10 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		
 	}
 	
-	public void viderChamps() {
-		this.txtNom.setText("");
-		this.txtPrenom.setText("");
-		this.txtEmail.setText("");
-		this.txtMdp.setText("");
-		this.txtAdresse.setText("");
-		this.txtCp.setText("");
-		this.txtVille.setText("");
-		this.txtTel.setText("");
-		this.txtRIB.setText("");
-	}
 	
+	
+	
+	/*******************************************************     INSERT     *******************************************************/
 	public void insertClient() {
 		String nom = this.txtNom.getText();
 		String prenom = this.txtPrenom.getText();
@@ -290,10 +349,40 @@ public class PanelClients extends PanelPrincipal implements ActionListener {
 		String tel = this.txtTel.getText();
 		String RIB = this.txtRIB.getText();
 		
+		//Contrôle saisi des champs	
 		if(nom.equals("") || prenom.equals("") || email.equals("") || mdp.equals("") || adresse.equals("") || cp.equals("") || 
 				ville.equals("") || tel.equals("") || RIB.equals("")) {
-			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
-		}else {
+			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs !");
+		}
+		else if(!Controleur.regexNomPrenom(nom)) {
+			JOptionPane.showMessageDialog(this, "Format NOM incorrect !");
+			this.txtNom.setText("");
+		}else if(!Controleur.regexNomPrenom(prenom)) {
+			JOptionPane.showMessageDialog(this, "Format PRENOM incorrect !");
+			this.txtPrenom.setText("");
+		}else if(!Controleur.regexEmail(email)) {
+			JOptionPane.showMessageDialog(this, "Format E-MAIL incorrect !");
+			this.txtEmail.setText("");
+		}else if(!Controleur.regexMdp(mdp)) {
+			JOptionPane.showMessageDialog(this, "Format MOT DE PASSE incorrect !");
+			this.txtMdp.setText("");
+		}else if(!Controleur.regexAdresse(adresse)) {
+			JOptionPane.showMessageDialog(this, "Format ADRESSE incorrect !");
+			this.txtAdresse.setText("");
+		}else if(!Controleur.regexCP(cp)) {
+			JOptionPane.showMessageDialog(this, "Format CODE POSTAL incorrect ! \n(ex: 75017 - 5 chiffres)");
+			this.txtCp.setText("");
+		}else if(!Controleur.regexVille(ville)) {
+			JOptionPane.showMessageDialog(this, "Format VILLE incorrect !");
+			this.txtVille.setText("");
+		}else if(!Controleur.regexTel(tel)) {
+			JOptionPane.showMessageDialog(this, "Format TEL incorrect ! \n(ex: 06xxxxxxx - sans espaces ni tirets)");
+			this.txtTel.setText("");
+		}else if(!Controleur.regexRIB(RIB)) {
+			JOptionPane.showMessageDialog(this, "Format RIB incorrect ! \n(27 caractéres commençant par FR)");
+			this.txtRIB.setText("");
+		}
+		else {
 			//instanciation nv client
 			Client unClient = new Client(nom,prenom,email,mdp,tel,adresse,cp,ville,RIB);
 			//appel de la methode du controleur pour insérer client

@@ -42,8 +42,6 @@ public class Habitation {
 	}
 	
 	
-	
-	
 	public int getRef_hab() {
 		return ref_hab;
 	}

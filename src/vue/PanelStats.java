@@ -13,34 +13,36 @@ import controleur.Controleur;
 
 public class PanelStats extends PanelPrincipal implements ActionListener  {
 	
+	//labels
 	private JLabel lbClients = new JLabel();
 	private JLabel lbHabitations = new JLabel();
 	private JLabel lbProprietaires = new JLabel();
 	private JLabel lbReservations = new JLabel();
-	
+	//panel
 	private JPanel panelCount = new JPanel();
 
 
 	public PanelStats(String titre) {
 		super(titre);
 		// TODO Auto-generated constructor stub
-		
+		//Placement panel
 		this.panelCount.setBounds(350,70,200,200);
 		this.panelCount.setBackground(new Color(242,242,242,242));
 		this.panelCount.setLayout(new GridLayout(4,1, 5, 5));
-		
+		//borders panel
 		this.panelCount.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 1),
 				BorderFactory.createEmptyBorder(10, 10, 10, 10)
 				));
-		
+		//Ajout labels dans panel
 		this.panelCount.add(this.lbClients);
 		this.panelCount.add(this.lbHabitations);
 		this.panelCount.add(this.lbProprietaires);
 		this.panelCount.add(this.lbReservations);
-		
+		//AJOUT DU TOUT
 		this.add(this.panelCount);
 		
+		//Récuperation des infos stats
 		int nbClients = Controleur.selectCountUtilisateur("client");
 		int nbHabitations = Controleur.selectCount("habitation");
 		int nbProprietaires = Controleur.selectCountUtilisateur("proprietaire");

@@ -6,8 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -28,11 +31,14 @@ import controleur.Tableau;
 
 public class PanelReservations extends PanelPrincipal implements ActionListener  {
 	
+	//créa élemen panel
 	private JPanel panelForm = new JPanel();
 	private JTextField txtDateRes = new JTextField();
 	private JTextField txtNbPerso = new JTextField();
 	private JTextField txtDateDebut = new JTextField();
 	private JTextField txtDateFin = new JTextField();
+	private JDateChooser dateDebut = new JDateChooser();
+	private JDateChooser dateFin = new JDateChooser();
 	private JComboBox<String> txtEtatRes = new JComboBox<String>();
 	private static JComboBox<String> txtIdC = new JComboBox();
 	private static JComboBox<String> txtRefHab = new JComboBox();
@@ -41,7 +47,7 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 	private JButton btnAnnuler = new JButton("Annuler");
 	private JButton btnValider = new JButton("Valider");
 	
-	private JTable tableReservations;
+	private JTable tableReservations;//Jtable
 	private JScrollPane scrollReservations;
 	private Tableau unTableau;
 	
@@ -54,29 +60,36 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 	
 	private JLabel lbNbReservations = new JLabel();
 
+	
+	
 	public PanelReservations(String titre) {
 		super(titre);
+		//Ajout item combo box etat_res
+		this.txtEtatRes.addItem("Sélectionner");
 		this.txtEtatRes.addItem("En attente");
 		this.txtEtatRes.addItem("Validee");
 		this.txtEtatRes.addItem("Annulee");
+		
 		// TODO Auto-generated constructor stub
+		//Placement panel filtrage
 		this.panelFiltre.setBounds(400,70,500,20);
 		this.panelFiltre.setBackground(new Color(242,242,242));
 		this.panelFiltre.setLayout(new GridLayout(1,3, 5, 5));
 		this.panelFiltre.add(new JLabel("Filtrer par : "));
 		this.panelFiltre.add(this.txtFiltre);
 		this.panelFiltre.add(this.btFiltrer);
-		
 		this.add(this.panelFiltre);
 		
+		//placement ajouter/modifier resas
 		this.lbInsertReservation.setBounds(120,70,200,20);
 		this.add(this.lbInsertReservation);
 		
+		//Placement panel insert
 		this.panelForm.setBounds(10,100,350,400);
 		this.panelForm.setBackground(new Color(242,242,242));
 		this.panelForm.setLayout(null);
 		this.panelForm.setLayout(new GridLayout(8,2, 5, 5));
-		
+		//Placement élements
 		this.panelForm.add(new JLabel("Client : "));
 		this.panelForm.add(this.txtIdC);
 		this.panelForm.add(new JLabel("Réf habitation : "));
@@ -84,33 +97,33 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		this.panelForm.add(new JLabel("Nombre personnes : "));
 		this.panelForm.add(this.txtNbPerso);
 		this.panelForm.add(new JLabel("Début séjour : "));
-		this.panelForm.add(this.txtDateDebut);
+		this.panelForm.add(this.dateDebut);
 		this.panelForm.add(new JLabel("Fin séjour : "));
-		this.panelForm.add(this.txtDateFin);
+		this.panelForm.add(this.dateFin);
 		this.panelForm.add(new JLabel("Etat : "));
 		this.panelForm.add(this.txtEtatRes);
-		
+		//Ajout btns
 		this.panelForm.add(this.btnAnnuler);
 		this.panelForm.add(this.btnValider);
 		this.panelForm.add(this.btSupprimer);
 		this.panelForm.add(this.btModifier);
-		
+		//Ajout borders
 		this.panelForm.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 1),
 				BorderFactory.createEmptyBorder(10,10,10,10)
 				));
-		
+		//Desactivation btns
 		this.btModifier.setEnabled(false);
 		this.btSupprimer.setEnabled(false);
-		
+		//Actualisation départ habitations et clients
 		PanelReservations.actualiserHabitations();
 		PanelReservations.actualiserClients();
-		
+		//AJOUT DU TOUT
 		this.add(this.panelForm);
 		
 		
 		//placement JTable
-		String nomsColonnes[] = {"Réf","Date réservation","Nombre personnes","Début","Fin","Etat","ID client","Réf Habitation"};
+		String nomsColonnes[] = {"Réf","Date rés","Personnes","Début","Fin","Etat","ID client","Réf Hab"};
 		this.unTableau = new Tableau(this.obtenirDonnees(""), nomsColonnes);
 		this.tableReservations = new JTable(this.unTableau);
 		this.scrollReservations = new JScrollPane(this.tableReservations);
@@ -118,7 +131,7 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		this.scrollReservations.setBackground(Color.BLACK);
 		this.add(this.scrollReservations);
 		
-		//Ajouter lbNbHab
+		//Ajouter lbNbResa
 		this.lbNbReservations.setBounds(600,500,400,20);
 		this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
 		this.add(this.lbNbReservations);
@@ -130,6 +143,10 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		this.btSupprimer.addActionListener(this);
 		this.btModifier.addActionListener(this);
 		
+		
+		
+		
+		/*******************************************************     MOUSE LISTENER     *******************************************************/
 		this.tableReservations.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -160,10 +177,27 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				int numLigne = tableReservations.getSelectedRow();
-				txtDateRes.setText(unTableau.getValueAt(numLigne,1).toString());
 				txtNbPerso.setText(unTableau.getValueAt(numLigne,2).toString());
-				txtDateDebut.setText(unTableau.getValueAt(numLigne,3).toString());
-				txtDateFin.setText(unTableau.getValueAt(numLigne,4).toString());
+				
+				//Gestion obtention des dates en objet DATE a partir String obtenu de la bdd
+				SimpleDateFormat formatAffichage = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					String strDateDebut = unTableau.getValueAt(numLigne,3).toString();
+					String strDateFin = unTableau.getValueAt(numLigne,4).toString();
+					
+					java.util.Date dateD = formatAffichage.parse(strDateDebut);
+					java.util.Date dateF = formatAffichage.parse(strDateFin);
+					
+					dateDebut.setDate(dateD);
+					dateFin.setDate(dateF);
+					
+				}catch(Exception ex) {
+					System.out.println("Erreur conversion date : " + ex.getMessage());
+					ex.printStackTrace();
+					dateDebut.setDate(null);
+					dateFin.setDate(null);
+				}
+				
 				txtEtatRes.setSelectedItem(unTableau.getValueAt(numLigne,5).toString());
 				String idC = unTableau.getValueAt(numLigne,6).toString();
 				for(int i = 0; i<txtIdC.getItemCount(); i++) {
@@ -190,6 +224,10 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		});
 	}
 	
+	
+	
+	
+	/*******************************************************     ACTUALISATION HAB     *******************************************************/
 	public static void actualiserHabitations() {
 		//remplir les client dans comboBox
 			txtRefHab.removeAllItems();
@@ -199,6 +237,11 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 					txtRefHab.addItem(uneHabitation.getRef_hab() + "-" + uneHabitation.getType() + " " + uneHabitation.getVille());
 				}
 		}
+	
+	
+	
+	
+	/*******************************************************     ACTUALISATION CLIENTS     *******************************************************/
 	public static void actualiserClients() {
 		//remplir les client dans comboBox
 			txtIdC.removeAllItems();
@@ -209,6 +252,10 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 				}
 		}
 	
+	
+	
+	
+	/*******************************************************     OBTENIR DONNEES     *******************************************************/
 	public Object [] [] obtenirDonnees (String filtre){
 		ArrayList<Reservation> lesReservations = Controleur.selectAllReservations(filtre);
 		Object [] [] matrice = new Object [lesReservations.size()][8];
@@ -226,7 +273,11 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		}
 		return matrice;
 	}
-
+	
+	
+	
+	
+	/*******************************************************     ACTION EVENTS     *******************************************************/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -249,13 +300,29 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 	}
 	
 	
+	
+	
+	/*******************************************************     VIDER CHAMPS     *******************************************************/
+	public void viderChamps() {
+		this.txtDateRes.setText("");
+		this.txtNbPerso.setText("");
+		this.txtIdC.setSelectedIndex(0);
+		this.txtRefHab.setSelectedIndex(0);
+		this.dateDebut.setDate(null);
+		this.dateFin.setDate(null);
+	}
+	
+	
+	
+	
+	/*******************************************************     DELETE     *******************************************************/
 	public void deleteReservation() {
 		int numLigne = this.tableReservations.getSelectedRow();
 		int refRes = Integer.parseInt(this.tableReservations.getValueAt(numLigne,0).toString());
 		int retour = JOptionPane.showConfirmDialog(this,"Voulez vous supprimer cette réservation ?","Suppression réservation",
 				JOptionPane.YES_NO_OPTION);
 		if(retour == 0) {
-			Controleur.deleteReservation(refRes);
+			Controleur.annulerReservation(refRes);
 			JOptionPane.showMessageDialog(this, "Suppression réservation effectuée avec succés");
 			this.viderChamps();
 			this.btModifier.setEnabled(false);
@@ -266,82 +333,135 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		}
 	}
 	
+	
+	
+	
+	/*******************************************************     UPDATE     *******************************************************/
 	public void updateReservation(){
 		int numLigne = this.tableReservations.getSelectedRow();
 		int refRes = Integer.parseInt(this.tableReservations.getValueAt(numLigne,0).toString());
-		int nbPerso = Integer.parseInt(this.txtNbPerso.getText());
-		String dateDebut = this.txtDateDebut.getText();
-		String dateFin = this.txtDateFin.getText();
-		String etatRes = this.txtEtatRes.getSelectedItem().toString();
 		String chaineC = this.txtIdC.getSelectedItem().toString();
-		String tabC[] = chaineC.split("-");
-		int idC = Integer.parseInt(tabC[0]);
 		String chaineH = txtRefHab.getSelectedItem().toString();
-		String tabH[] = chaineH.split("-");
-		int refHab = Integer.parseInt(tabH[0]);
+		String nbPersoStr = this.txtNbPerso.getText();
+		Date dateDebutD = this.dateDebut.getDate();
+		Date dateFinD = this.dateFin.getDate();
+		String etatRes = this.txtEtatRes.getSelectedItem().toString();
 		
-		if(this.txtNbPerso.getText().isEmpty() || dateDebut.equals("") || dateFin.equals("") || 
-				   etatRes.equals("") || txtIdC.equals("Sélectionner") || txtRefHab.getSelectedItem().toString().isEmpty()) {
-					JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
-				}else {
-					//instanciation nv Resa
-					Reservation uneReservation = new Reservation(refRes,"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
-					//appel de la methode du controleur pour insérer habitation
-					Controleur.updateReservation(uneReservation);
-					JOptionPane.showMessageDialog(this,"Modification réussie de la réservation");
-					//actualiser l'affichage
-					Object ligne [] = {uneReservation.getRef_hab(),"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
-					//vider les champs
-					this.viderChamps();
-					this.btModifier.setEnabled(false);
-					this.btSupprimer.setEnabled(false);
-					this.btnAnnuler.setEnabled(true);
-					this.unTableau.setDonnes(this.obtenirDonnees(""));
-					this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
-				}
+		if(chaineC.equals("Sélectionner") || chaineH.equals("Sélectionner") || nbPersoStr.equals("") || 
+			dateDebutD == null || dateFinD == null || etatRes.equals("")) {
+			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
 		}
-	
-	
-	public void viderChamps() {
-		this.txtDateRes.setText("");
-		this.txtNbPerso.setText("");
-		this.txtDateDebut.setText("");
-		this.txtDateFin.setText("");
-		this.txtIdC.setSelectedIndex(0);
-		this.txtRefHab.setSelectedIndex(0);
+		else if(!Controleur.regexChiffres(nbPersoStr)) {
+			JOptionPane.showMessageDialog(this,"Format NOMBRE PERSONNES incorrect !");
+			this.txtNbPerso.setText("");
+		}
+		//Gestion cohérence dates resa
+		else if(dateDebutD.before(new Date())){
+			JOptionPane.showMessageDialog(this,"Date début de séjour incohérente ! \n(réservation au moins 1 jour à l'avance)");
+			this.dateDebut.setDate(null);
+		}else if(dateFinD.before(dateDebutD)) {
+			JOptionPane.showMessageDialog(this,"Date fin de séjour incohérente !");
+			this.dateFin.setDate(null);
+		}
+		else {
+			String tabC[] = chaineC.split("-");
+			int idC = Integer.parseInt(tabC[0]);
+			
+			//gestion capacité max habitation
+			String tabH[] = chaineH.split("-");
+			int refHab = Integer.parseInt(tabH[0]);
+			int nbPerso = Integer.parseInt(this.txtNbPerso.getText());
+			int capaciteMax = Controleur.selectCapaciteHab(refHab);
+			if(nbPerso > capaciteMax) {
+				JOptionPane.showMessageDialog(this,"Nombre de personnes supérieur à la capacité de l'habitation !");
+				this.txtNbPerso.setText("");
+				return;
+			}
+			
+			//Formatage dates pour insertion en base
+			SimpleDateFormat formatageSQL = new SimpleDateFormat("yyyy-MM-dd");		
+			String dateDebut = formatageSQL.format(dateDebutD);
+			String dateFin = formatageSQL.format(dateFinD);
+					
+			//instanciation nv Resa
+			Reservation uneReservation = new Reservation(refRes,"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
+			//appel de la methode du controleur pour insérer resa
+			Controleur.updateReservation(uneReservation);
+			JOptionPane.showMessageDialog(this,"Modification réussie de la réservation");
+			//actualiser l'affichage
+			Object ligne [] = {uneReservation.getRef_hab(),"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
+			//vider les champs
+			this.viderChamps();
+			this.btModifier.setEnabled(false);
+			this.btSupprimer.setEnabled(false);
+			this.btnAnnuler.setEnabled(true);
+			this.unTableau.setDonnes(this.obtenirDonnees(""));
+			this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
+		}
 	}
 	
+	
+	
+	
+	/*******************************************************     INSERT     *******************************************************/
 	public void insertReservation() {
-		int nbPerso = Integer.parseInt(this.txtNbPerso.getText());
-		String dateDebut = this.txtDateDebut.getText();
-		String dateFin = this.txtDateFin.getText();
-		String etatRes = this.txtEtatRes.getSelectedItem().toString();
 		String chaineC = this.txtIdC.getSelectedItem().toString();
-		String tabC[] = chaineC.split("-");
-		int idC = Integer.parseInt(tabC[0]);
 		String chaineH = txtRefHab.getSelectedItem().toString();
-		String tabH[] = chaineH.split("-");
-		int refHab = Integer.parseInt(tabH[0]);
-
+		String nbPersoStr = this.txtNbPerso.getText();
+		Date dateDebutD = this.dateDebut.getDate();
+		Date dateFinD = this.dateFin.getDate();
+		String etatRes = this.txtEtatRes.getSelectedItem().toString();
 		
-		if(this.txtNbPerso.getText().isEmpty() || dateDebut.equals("") || dateFin.equals("") || 
-		   etatRes.equals("") || this.txtIdC.equals("Sélectionner") || txtRefHab.getSelectedItem().toString().isEmpty()) {
+		//verif saisis champs
+		if(chaineC.trim().equals("Sélectionner") || chaineH.trim().equals("Sélectionner") || nbPersoStr.equals("") || 
+			dateDebutD == null || dateFinD == null || etatRes.trim().equals("Sélectionner")) {
 			JOptionPane.showMessageDialog(this,"Veuillez remplir touts les champs");
-		}else {
+		}
+		else if(!Controleur.regexChiffres(nbPersoStr)) {
+			JOptionPane.showMessageDialog(this,"Format NOMBRE PERSONNES incorrect !");
+			this.txtNbPerso.setText("");
+		}
+		//Gestion cohérence dates resa
+		else if(dateDebutD.before(new Date())){
+			JOptionPane.showMessageDialog(this,"Date début de séjour incohérente ! \n(réservation au moins 1 jour à l'avance)");
+			this.dateDebut.setDate(null);
+		}
+		else if(dateFinD.before(dateDebutD)) {
+			JOptionPane.showMessageDialog(this,"Date fin de séjour incohérente !");
+			this.dateFin.setDate(null);
+		}
+		else {
+			int nbPerso = Integer.parseInt(this.txtNbPerso.getText());
+			
+			String tabC[] = chaineC.split("-");
+			int idC = Integer.parseInt(tabC[0]);
+			
+			//gestion capacité max habitation
+			String tabH[] = chaineH.split("-");
+			int refHab = Integer.parseInt(tabH[0]);
+			int capaciteMax = Controleur.selectCapaciteHab(refHab);
+			if(nbPerso > capaciteMax) {
+				JOptionPane.showMessageDialog(this,"Nombre de personnes supérieur à la capacité de l'habitation !");
+				this.txtNbPerso.setText("");
+				return;
+			}
+			
+			//Formatage dates pour insertion en base
+			SimpleDateFormat formatageSQL = new SimpleDateFormat("yyyy-MM-dd");
+			String dateDebut = formatageSQL.format(dateDebutD);
+			String dateFin = formatageSQL.format(dateFinD);
+			
 			//instanciation nv Resa
 			Reservation uneReservation = new Reservation("",nbPerso,dateDebut,dateFin,etatRes,idC,refHab);
 			//appel de la methode du controleur pour insérer habitation
 			int idGenere = Controleur.insertReservation(uneReservation);
 			JOptionPane.showMessageDialog(this,"Insertion réussie de la réservation");
 			//actualiser l'affichage
-			Object ligne [] = {uneReservation.getRef_res(),"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
-			this.unTableau.ajoutLigne(ligne);
+			Object ligne [] = {idGenere,"",nbPerso,dateDebut,dateFin,etatRes,idC,refHab};
 			//vider les champs
 			this.viderChamps();
 			this.unTableau.setDonnes(this.obtenirDonnees(""));
 			this.lbNbReservations.setText("Nombre de réservations : "+unTableau.getRowCount());
 		}
 	}
-	
-
 }

@@ -12,5 +12,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/kezyr/Downloads/mysql-connector-java-8.0.30/mysql-connector-java-8.0.30/mysql-connector-java-8.0.30.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kezyr/Downloads/jcalendar-1.4/lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

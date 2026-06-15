@@ -23,6 +23,7 @@ import controleur.Admin;
 
 public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 	
+	//Créa elements
 	private JPanel panelIcon = new JPanel();
 	private JButton btAnnuler = new JButton("Annuler");
 	private JButton btValider = new JButton("Connexion");
@@ -34,8 +35,7 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 	
 	
 	public VueConnexion() {
-		
-		//Changer titre fenêtre
+		//Titre fenêtre
 		this.setTitle("Neige et Soleil");
 		//Definir les dimensions de la fenêtre
 		this.setBounds(400,20,800,400);
@@ -48,12 +48,13 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 		//supp le layout par defaut
 		this.setLayout(null);
 		
+		//Gestion image logo
 		ImageIcon uneImage = new ImageIcon("src/img/neige-soleil-presentation2.png");
 		JLabel lbImage = new JLabel(uneImage);
 		lbImage.setBounds(30,20,uneImage.getIconWidth(), uneImage.getIconHeight());
 		this.add(lbImage);
 		
-		
+		//panel
 		this.panelIcon.setBounds(450,120,250,100);
 		this.panelIcon.setBackground(new Color(17,44,80));
 		this.panelIcon.setLayout(new GridLayout(3,2, 5, 5));
@@ -68,6 +69,7 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 		this.panelIcon.add(this.btValider);
 		this.panelIcon.add(this.btAnnuler);
 		
+		//AJOUT DU TOUT
 		this.add(this.panelIcon);
 		
 		this.btAnnuler.addActionListener(this);
@@ -83,6 +85,8 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 	
 	
 
+	
+	/*******************************************************     ACTION EVENTS    *******************************************************/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -96,6 +100,9 @@ public class VueConnexion extends JFrame implements ActionListener,KeyListener {
 	}
 	
 	
+	
+	
+	/*******************************************************     TRAITEMENT CONNEXION     *******************************************************/
 	public void traitement() {
 		String email = this.txtEmail.getText();
 		String mdp  = new String (this.txtMdp.getPassword());

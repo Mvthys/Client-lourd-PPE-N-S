@@ -67,13 +67,15 @@ public class Modele {
 	// --- SELECT WHERE --- //
 	public static Utilisateur selectWhereAdmin(String email, String mdp) {
 		Utilisateur unAdmin = null;
-		String requete = "select * from utilisateur where email ='"+ email +"' and mdp ='"+ mdp +"' and role = 'admin';";
+		String req = "SELECT * FROM utilisateur WHERE email = ? and mdp = ? and role = 'admin';";
 		try {
 			uneBdd.seConnecter();
 			//comme le prepare en php
-			Statement unStat = uneBdd.getMaConnexion().createStatement();
-			//comme execute en phph
-			ResultSet unResultat = unStat.executeQuery(requete);
+			PreparedStatement pst = uneBdd.getMaConnexion().prepareStatement(req);
+			pst.setString(1, email);
+			pst.setString(2, mdp);
+			//comme execute en php, rs pour récupérer la data
+			ResultSet unResultat = pst.executeQuery();
 			//comme le fetch
 			if(unResultat.next()) {
 				unAdmin = new Utilisateur(
@@ -85,10 +87,15 @@ public class Modele {
 						unResultat.getString("tel"),
 						unResultat.getString("role")
 				); 
+				System.out.println("Connexion réussie pour l'admin : " + unAdmin.getId_user());
+			}else {
+				System.out.println("Tentative connexion échoué");
 			}
+			pst.close();
 			uneBdd.seDeconnecter();
+			
 		}catch(SQLException e) {
-			System.out.println("erreur requete : " + requete);
+			System.out.println("Erreur SQL : " + req);
 			e.printStackTrace();
 		}
 		return unAdmin;
@@ -730,7 +737,6 @@ public class Modele {
 	// ---  DELETE --- //
 	public static void deleteMaison(int ref_hab) {
 		String reqU = "UPDATE contrat SET status_c = 'Annule' WHERE ref_hab = ?";
-		String reqD1 = "DELETE FROM contrat WHERE ref_hab = ?";
 		String reqD2 = "DELETE FROM maison WHERE ref_hab = ?";
 		
 		try {
@@ -743,10 +749,7 @@ public class Modele {
 			pstU.close();
 			
 			//delete contrat
-			PreparedStatement pstD1 = uneBdd.getMaConnexion().prepareStatement(reqD1);
-			pstD1.setInt(1, ref_hab);
-			pstD1.executeUpdate();
-			pstD1.close();
+			
 			
 			//delete maison
 			PreparedStatement pstD2 = uneBdd.getMaConnexion().prepareStatement(reqD2);
@@ -931,7 +934,6 @@ public class Modele {
 	// ---  DELETE --- //
 	public static void deleteAppartement(int ref_hab) {
 		String reqU = "UPDATE contrat SET status_c = 'Annule' WHERE ref_hab = ?";
-		String reqD1 = "DELETE FROM contrat WHERE ref_hab = ?";
 		String reqD2 = "DELETE FROM appartement WHERE ref_hab = ? ";
 		
 		try {
@@ -944,10 +946,7 @@ public class Modele {
 			pstU.close();
 			
 			//delete contrat
-			PreparedStatement pstD1 = uneBdd.getMaConnexion().prepareStatement(reqD1);
-			pstD1.setInt(1, ref_hab);
-			pstD1.executeUpdate();
-			pstD1.close();
+			
 			
 			//delete appart
 			PreparedStatement pstD2 = uneBdd.getMaConnexion().prepareStatement(reqD2);
@@ -1252,7 +1251,6 @@ public class Modele {
 	// ---  ANNULER RESERVATION --- //
 	public static void annulerReservation(int ref_res) {
 		String reqUpdate = "UPDATE reservation SET etat_res = 'Annulee' WHERE ref_res = ?";
-		String reqDelete = "DELETE FROM reservation WHERE ref_res = ?";
 		try {
 		uneBdd.seConnecter();
 		
@@ -1263,10 +1261,7 @@ public class Modele {
 		pstU.close();
 		
 		//delete
-		PreparedStatement pstD = uneBdd.getMaConnexion().prepareStatement(reqDelete);
-		pstD.setInt(1, ref_res);
-		pstD.executeUpdate();
-		pstD.close();
+		
 		
 		uneBdd.seDeconnecter();
 		System.out.println("Réussite annulation réservation : " + ref_res);

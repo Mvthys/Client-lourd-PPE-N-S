@@ -1,6 +1,7 @@
 package controleur;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -212,5 +213,6 @@ public class Controleur {
 		Matcher matcher = regex.matcher(chaine);
 		return matcher.matches();
 	}
+		
 
 }

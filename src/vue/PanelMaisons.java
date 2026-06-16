@@ -146,8 +146,8 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		
 		
 		//placement JTable
-		String nomsColonnes[] = {"ID","Type","Adresse","Cp","Ville","TarifBas","TarifMoy","TarifHaut","Surface",
-								 "ID Proprietaire","Description","Titre","Capacite","Caractéristiques"};
+		String nomsColonnes[] = {"ID","Type","Adr","CP","Ville","Tbas","Tmoy","Thaut","Surf",
+								 "IDp","Desc","Titre","Capa","Car"};
 		this.unTableau = new Tableau(this.obtenirDonnees(""), nomsColonnes);
 		this.tableHabitations = new JTable(this.unTableau);
 		this.scrollHabitations = new JScrollPane(this.tableHabitations);
@@ -283,6 +283,7 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 		// TODO Auto-generated method stub
 		if(e.getSource() == this.btnAnnuler) {
 			this.viderChamps();
+			this.tableHabitations.clearSelection();
 			this.btModifier.setEnabled(false);
 			this.btSupprimer.setEnabled(false);
 			this.btnValider.setEnabled(true);
@@ -392,19 +393,19 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Format ADRESSE incorrect !");
 			this.txtAdresse.setText("");
 		}else if(!Controleur.regexCP(cp)) {
-			JOptionPane.showMessageDialog(this,"Format CODE POSTAL incorrect ! \n(ex: 75017 - 5 chiffres)");
+			JOptionPane.showMessageDialog(this,"Format CODE POSTAL incorrect ! \n5 chiffres - (ex: 75017)");
 			this.txtCp.setText("");
 		}else if(!Controleur.regexVille(ville)) {
 			JOptionPane.showMessageDialog(this, "Format VILLE incorrect !");
 			this.txtVille.setText("");
 		}else if(!Controleur.regexTarifs(tarifBas)) {
-			JOptionPane.showMessageDialog(this, "Format TARIF BAS incorrect ! \n(vueillez saisir un chiffre/nombre rond)");
+			JOptionPane.showMessageDialog(this, "Format TARIF BAS incorrect !");
 			this.txtTarifBas.setText("");
 		}else if(!Controleur.regexTarifs(tarifMoy)) {
-			JOptionPane.showMessageDialog(this, "Format TARIF MOYEN incorrect ! \n(vueillez saisir un chiffre/nombre rond)");
+			JOptionPane.showMessageDialog(this, "Format TARIF MOYEN incorrect !");
 			this.txtTarifMoy.setText("");
 		}else if(!Controleur.regexTarifs(tarifHaut)) {
-			JOptionPane.showMessageDialog(this, "Format TARIF HAUT incorrect ! \n(vueillez saisir un chiffre/nombre rond)");
+			JOptionPane.showMessageDialog(this, "Format TARIF HAUT incorrect !");
 			this.txtTarifHaut.setText("");
 		}else if(!Controleur.regexChiffres(surface)) {
 			JOptionPane.showMessageDialog(this, "Format SURFACE incorrect ! \n(vueillez saisir un chiffre/nombre rond)");
@@ -508,7 +509,7 @@ public class PanelMaisons extends PanelPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(this,"Format ADRESSE incorrect !");
 			this.txtAdresse.setText("");
 		}else if(!Controleur.regexCP(cp)) {
-			JOptionPane.showMessageDialog(this,"Format CODE POSTAL incorrect ! \n(ex: 75017 - 5 chiffres)");
+			JOptionPane.showMessageDialog(this,"Format CODE POSTAL incorrect ! \n5 chiffres - (ex: 75017)");
 			this.txtCp.setText("");
 		}else if(!Controleur.regexVille(ville)) {
 			JOptionPane.showMessageDialog(this, "Format VILLE incorrect !");

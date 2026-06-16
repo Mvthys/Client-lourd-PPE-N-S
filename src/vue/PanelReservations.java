@@ -283,6 +283,7 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		// TODO Auto-generated method stub
 		if(e.getSource() == this.btnAnnuler) {
 			this.viderChamps();
+			this.tableReservations.clearSelection();
 			this.btModifier.setEnabled(false);
 			this.btSupprimer.setEnabled(false);
 			this.btnValider.setEnabled(true);
@@ -310,6 +311,7 @@ public class PanelReservations extends PanelPrincipal implements ActionListener 
 		this.txtRefHab.setSelectedIndex(0);
 		this.dateDebut.setDate(null);
 		this.dateFin.setDate(null);
+		this.txtEtatRes.setSelectedItem("Sélectionner");
 	}
 	
 	

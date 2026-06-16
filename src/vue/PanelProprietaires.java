@@ -112,7 +112,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 		
 		
 		//placement JTable
-		String nomsColonnes[] = {"ID","Nom","Prenom","Email","Mdp","Adresse","CP","Ville","Tel","RIB"};
+		String nomsColonnes[] = {"ID","Nom","Prenom","Email","Mdp","Adresse","CP","Ville","Tél","RIB"};
 		this.unTableau = new Tableau(this.obtenirDonnees(""), nomsColonnes);
 		this.tableProprietaires = new JTable(this.unTableau);
 		this.scrollProprietaires = new JScrollPane(this.tableProprietaires);
@@ -216,6 +216,7 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 		// TODO Auto-generated method stub
 		if(e.getSource() == this.btnAnnuler) {
 			this.viderChamps();
+			this.tableProprietaires.clearSelection();
 			btModifier.setEnabled(false);
 			btSupprimer.setEnabled(false);
 			btnValider.setEnabled(true);
@@ -306,13 +307,13 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			JOptionPane.showMessageDialog(this, "Format ADRESSE incorrect !");
 			this.txtAdresse.setText("");
 		}else if(!Controleur.regexCP(cp)) {
-			JOptionPane.showMessageDialog(this, "Format CODE POSTAL incorrect ! \n(ex: 75017 - 5 chiffres)");
+			JOptionPane.showMessageDialog(this, "Format CODE POSTAL incorrect ! \n5 chiffres - (ex: 75017)");
 			this.txtCp.setText("");
 		}else if(!Controleur.regexVille(ville)) {
 			JOptionPane.showMessageDialog(this, "Format VILLE incorrect !");
 			this.txtVille.setText("");
 		}else if(!Controleur.regexTel(tel)) {
-			JOptionPane.showMessageDialog(this, "Format TEL incorrect ! \n(ex: 06xxxxxxx - sans espaces ni tirets)");
+			JOptionPane.showMessageDialog(this, "Format TEL incorrect ! \nchiffres sans espaces ni tirets - (ex: 06xxxxxxx)");
 			this.txtTel.setText("");
 		}else if(!Controleur.regexRIB(RIB)) {
 			JOptionPane.showMessageDialog(this, "Format RIB incorrect ! \n(27 caractéres commençant par FR)");
@@ -369,13 +370,13 @@ public class PanelProprietaires extends PanelPrincipal implements ActionListener
 			JOptionPane.showMessageDialog(this, "Format ADRESSE incorrect !");
 			this.txtAdresse.setText("");
 		}else if(!Controleur.regexCP(cp)) {
-			JOptionPane.showMessageDialog(this, "Format CODE POSTAL incorrect ! \n(ex: 75017 - 5 chiffres)");
+			JOptionPane.showMessageDialog(this, "Format CODE POSTAL incorrect ! \n5 chiffres - (ex: 75017)");
 			this.txtCp.setText("");
 		}else if(!Controleur.regexVille(ville)) {
 			JOptionPane.showMessageDialog(this, "Format VILLE incorrect !");
 			this.txtVille.setText("");
 		}else if(!Controleur.regexTel(tel)) {
-			JOptionPane.showMessageDialog(this, "Format TEL incorrect ! \n(ex: 06xxxxxxx - sans espaces ni tirets)");
+			JOptionPane.showMessageDialog(this, "Format TEL incorrect ! \nchiffres sans espaces ni tirets - (ex: 06xxxxxxx)");
 			this.txtTel.setText("");
 		}else if(!Controleur.regexRIB(RIB)) {
 			JOptionPane.showMessageDialog(this, "Format RIB incorrect ! \n(27 caractéres commençant par FR)");
